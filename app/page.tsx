@@ -1,0 +1,250 @@
+import Image from "next/image";
+import { SiteLink as Link } from "./components/SiteLink";
+import { productFamilies, projects, stats } from "./site-data";
+
+export default function Home() {
+  return (
+    <main id="contenu">
+      <section className="hero shell">
+        <div className="hero-copy">
+          <p className="eyebrow">Manufacturier québécois · Sorel-Tracy</p>
+          <h1>
+            Pensées ici.
+            <br />
+            Fabriquées ici.
+            <br />
+            <em>Installées pour durer.</em>
+          </h1>
+          <p className="hero-intro">
+            Des ouvertures à la mesure de votre maison — avec une équipe qui
+            conseille, mesure, fabrique et installe.
+          </p>
+          <div className="button-row">
+            <Link className="button button-dark" href="/soumission">
+              Parler de mon projet <span aria-hidden="true">↗</span>
+            </Link>
+            <Link className="text-link" href="/produits">
+              Explorer les produits <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+          <ul className="hero-proof" aria-label="Points de confiance">
+            <li>Fabrication 100 % québécoise</li>
+            <li>Produits ENERGY STAR offerts</li>
+            <li>Licence RBQ 8246-5071-36</li>
+          </ul>
+        </div>
+        <figure className="hero-media">
+          <Image
+            src="/images/realisation-mes.webp"
+            alt="Maison contemporaine avec fenêtres, porte et portes de garage noires"
+            width={1200}
+            height={800}
+            priority
+          />
+          <figcaption>
+            <span>Votre projet, de A à Z</span>
+            Prise de mesures · Fabrication · Installation
+          </figcaption>
+        </figure>
+      </section>
+
+      <section className="stats-band" aria-label="Boulet en chiffres">
+        <div className="shell stats-grid">
+          {stats.map((stat) => (
+            <div key={stat.value}>
+              <strong>{stat.value}</strong>
+              <span>{stat.label}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="section shell opening-statement">
+        <div>
+          <p className="eyebrow">Une maison mieux habitée</p>
+          <h2>L’ouverture change tout.</h2>
+        </div>
+        <div>
+          <p className="large-copy">
+            La bonne fenêtre ne se résume pas à un profil. Elle transforme la
+            lumière, le silence, la température et la façon dont une pièce se
+            vit au quotidien.
+          </p>
+          <p>
+            Notre rôle est de faire tenir ensemble l’architecture, la
+            performance et la réalité du chantier — sans vous perdre dans le
+            catalogue.
+          </p>
+        </div>
+      </section>
+
+      <section className="section products-section" id="produits">
+        <div className="shell section-heading horizontal-heading">
+          <div>
+            <p className="eyebrow">Quatre familles, un même niveau d’attention</p>
+            <h2>Choisissez par usage, pas par jargon.</h2>
+          </div>
+          <Link className="text-link" href="/produits">
+            Comparer toutes les options <span aria-hidden="true">→</span>
+          </Link>
+        </div>
+        <div className="shell product-grid">
+          {productFamilies.map((family) => (
+            <article className="product-card" key={family.id}>
+              <a href={`/produits#${family.id}`}>
+                <div className="product-image-wrap">
+                  <Image
+                    src={family.image}
+                    alt={family.imageAlt}
+                    width={435}
+                    height={847}
+                  />
+                  <span>{family.index}</span>
+                </div>
+                <div className="product-card-copy">
+                  <p>{family.note}</p>
+                  <h3>{family.title}</h3>
+                  <span className="circle-arrow" aria-hidden="true">
+                    ↗
+                  </span>
+                </div>
+              </a>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="section process-section" id="methode">
+        <div className="shell process-grid">
+          <div className="process-intro">
+            <p className="eyebrow eyebrow-light">Du premier croquis au dernier joint</p>
+            <h2>Un projet simple à suivre.</h2>
+            <p>
+              Un seul fil conducteur, des décisions au bon moment et une
+              équipe qui connaît le produit jusque dans sa fabrication.
+            </p>
+            <Link className="button button-light" href="/soumission">
+              Préparer mon projet
+            </Link>
+          </div>
+          <ol className="process-list">
+            <li>
+              <span>01</span>
+              <div>
+                <h3>Comprendre</h3>
+                <p>Style de maison, inconforts actuels, priorités et budget.</p>
+              </div>
+            </li>
+            <li>
+              <span>02</span>
+              <div>
+                <h3>Mesurer</h3>
+                <p>Ouvertures, contraintes du bâtiment et conditions de pose.</p>
+              </div>
+            </li>
+            <li>
+              <span>03</span>
+              <div>
+                <h3>Fabriquer</h3>
+                <p>Configuration sur mesure dans l’usine de Sorel-Tracy.</p>
+              </div>
+            </li>
+            <li>
+              <span>04</span>
+              <div>
+                <h3>Installer</h3>
+                <p>Pose, ajustements et explications pour la suite.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section className="section shell proof-section">
+        <div className="proof-image">
+          <Image
+            src="/images/realisation-paris-freres.webp"
+            alt="Projet multirésidentiel avec produits Boulet à Trois-Rivières"
+            width={1200}
+            height={800}
+          />
+          <p>Les Habitations Paris &amp; Frères · Trois-Rivières</p>
+        </div>
+        <div className="proof-copy">
+          <p className="eyebrow">Une signature qui traverse les générations</p>
+          <h2>Depuis 1976, la même idée: bien faire, complètement.</h2>
+          <p>
+            De l’atelier familial fondé par Eddy Boulet à une équipe de plus de
+            120 personnes, l’entreprise a grandi sans séparer le produit du
+            service qui l’accompagne.
+          </p>
+          <div className="assurance-grid">
+            <div>
+              <strong>25 ans</strong>
+              <span>sur certaines composantes PVC et aluminium*</span>
+            </div>
+            <div>
+              <strong>10 ans</strong>
+              <span>sur plusieurs thermos et éléments de quincaillerie*</span>
+            </div>
+          </div>
+          <p className="fine-print">
+            * Selon le produit, l’usage et les conditions de la garantie limitée.
+          </p>
+          <div className="button-row">
+            <Link className="text-link" href="/entreprise">
+              Découvrir notre histoire <span aria-hidden="true">→</span>
+            </Link>
+            <Link className="text-link" href="/service">
+              Accéder à l’après-vente <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="section projects-section">
+        <div className="shell section-heading horizontal-heading">
+          <div>
+            <p className="eyebrow">Voir le résultat, pas seulement le produit</p>
+            <h2>Réalisations d’ici.</h2>
+          </div>
+          <Link className="text-link" href="/realisations">
+            Voir les projets <span aria-hidden="true">→</span>
+          </Link>
+        </div>
+        <div className="shell project-strip">
+          {projects.map((project, index) => (
+            <figure className={index === 1 ? "project-featured" : ""} key={project.title}>
+              <Image
+                src={project.image}
+                alt={project.alt}
+                width={1200}
+                height={800}
+              />
+              <figcaption>
+                <span>{project.type}</span>
+                <strong>{project.title}</strong>
+                <small>{project.location}</small>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+
+      <section className="quote-banner">
+        <div className="shell quote-banner-inner">
+          <p className="eyebrow eyebrow-light">Votre maison mérite une réponse précise</p>
+          <h2>Parlons des ouvertures qui vont vraiment changer votre quotidien.</h2>
+          <div className="button-row">
+            <Link className="button button-coral" href="/soumission">
+              Commencer ma demande <span aria-hidden="true">↗</span>
+            </Link>
+            <a className="text-link text-link-light" href="tel:+14507429424">
+              450 742-9424
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
