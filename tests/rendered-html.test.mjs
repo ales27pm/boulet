@@ -50,9 +50,10 @@ test("server-renders the redesigned French homepage", async () => {
   assert.match(html, /product-patio-concept-v1\.webp/);
   assert.match(html, /product-garage-concept-v1\.webp/);
   assert.match(html, /process-measure-v1\.webp/);
-  assert.match(html, /Visualisations générées par IA/);
-  assert.ok((html.match(/Visualisation IA/g) ?? []).length >= 4);
+  assert.match(html, /Images d’inspiration/);
+  assert.ok((html.match(/Image d’inspiration/g) ?? []).length >= 4);
   assert.match(html, /Personne et lieu fictifs/);
+  assert.doesNotMatch(html, /\bIA\b|\bAI\b|visualisation|image générée/i);
   assert.match(html, /href="\/soumission"/);
   assert.match(html, /href="\/service"/);
   assert.doesNotMatch(html, /hero-frame-system/);
@@ -98,7 +99,7 @@ test("server-renders every primary customer route", async () => {
   }
 });
 
-test("uses generated guidance without replacing factual product proof", async () => {
+test("keeps inspiration imagery separate from factual product proof", async () => {
   const productsResponse = await render("/produits");
   const productsHtml = await productsResponse.text();
   assert.match(productsHtml, /\/images\/fenetres-hybrides\.webp/);
@@ -116,8 +117,13 @@ test("uses generated guidance without replacing factual product proof", async ()
     assert.equal(response.status, 200, pathname);
     const html = await response.text();
     assert.match(html, imageMarker, pathname);
-    assert.match(html, /Image générée par IA/, pathname);
+    assert.match(html, /Mise en situation/, pathname);
     assert.match(html, disclosureMarker, pathname);
+    assert.doesNotMatch(
+      html,
+      /\bIA\b|\bAI\b|visualisation|image générée/i,
+      pathname,
+    );
     if (pathname === "/service" || pathname === "/soumission") {
       assert.match(html, /Vous continuerez sur fenetresboulet\.com/, pathname);
     }
@@ -143,6 +149,10 @@ test("removes the starter preview and keeps required project assets", async () =
   const packageJson = await readFile(new URL("package.json", projectRoot), "utf8");
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
   await assert.rejects(access(new URL("app/_sites-preview", projectRoot)));
+  await assert.rejects(
+    access(new URL("public/images/custom/ASSET-MANIFEST.md", projectRoot)),
+  );
+  await access(new URL("docs/asset-provenance/custom-assets.md", projectRoot));
 
   for (const asset of [
     "public/favicon.ico",
@@ -197,6 +207,6 @@ test("uses the supplied Boulet identity exactly", async () => {
   );
   assert.equal(
     createHash("sha256").update(socialCard).digest("hex"),
-    "40dd9b0d25fbbf83850580aae36f4ea3e7e3a565387e82e6c69e52da33db6495",
+    "33f1118a14626908826750416ae95b95ac20219949699b778c7ac8708fcb75d8",
   );
 });

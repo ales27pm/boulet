@@ -85,9 +85,10 @@ export default function Home() {
           <div>
             <p className="eyebrow">Quatre familles de produits</p>
             <h2>Comparez selon votre projet.</h2>
-            <p className="asset-disclosure" id="product-visualization-note">
-              Visualisations générées par IA — modèles, dimensions, vitrage et
-              finitions à confirmer.
+            <p className="asset-disclosure" id="product-inspiration-note">
+              Images d’inspiration — aucun modèle précis ni aucune réalisation
+              client ne sont représentés; dimensions, vitrage et finitions à
+              confirmer.
             </p>
           </div>
           <Link className="text-link" href="/produits">
@@ -96,7 +97,7 @@ export default function Home() {
         </div>
         <div
           className="shell product-grid"
-          aria-describedby="product-visualization-note"
+          aria-describedby="product-inspiration-note"
         >
           {productFamilies.map((family) => (
             <article className="product-card" key={family.id}>
@@ -109,8 +110,11 @@ export default function Home() {
                     height={1402}
                   />
                   <span className="product-index">{family.index}</span>
-                  <span className="product-ai-badge" aria-hidden="true">
-                    Visualisation IA
+                  <span
+                    className="product-inspiration-badge"
+                    aria-hidden="true"
+                  >
+                    Image d’inspiration
                   </span>
                 </div>
                 <div className="product-card-copy">

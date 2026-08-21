@@ -38,7 +38,7 @@ export const metadata: Metadata = {
         url: "/images/custom/og-custom-v1.jpg",
         width: 1200,
         height: 630,
-        alt: "Visuel conceptuel généré par IA — maison fictive aux fenêtres noires; aucune réalisation client n’est représentée.",
+        alt: "Image d’inspiration montrant une maison fictive aux fenêtres noires; aucune réalisation client n’est représentée.",
       },
     ],
   },

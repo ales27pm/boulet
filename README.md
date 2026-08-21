@@ -29,7 +29,7 @@ The project uses vinext and retains `.openai/hosting.json` for optional Sites de
 
 ## Asset provenance
 
-Product and named-project photographs are downloaded from the company's current public website for this redesign prototype and remain the site's factual proof. The separate custom guidance suite in `public/images/custom` was created with built-in Imagegen for category navigation, process explanation, quote and service preparation, and social sharing. Every generated scene is visibly disclosed in context and is never presented as a customer project, employee, product model, or facility. The exact prompts, source IDs, allowed contexts, and disclosure rules are recorded in `public/images/custom/ASSET-MANIFEST.md`.
+Product and named-project photographs are downloaded from the company's current public website for this redesign prototype and remain the site's factual proof. The separate custom guidance suite in `public/images/custom` was created with built-in Imagegen for category navigation, process explanation, quote and service preparation, and social sharing. Every generated scene is presented as inspiration or a mise en situation and is never presented as a customer project, employee, product model, or facility. The exact prompts, source IDs, allowed contexts, and provenance rules are recorded in `docs/asset-provenance/custom-assets.md`.
 
 `public/og.png` and `public/og-v2.png` are retained earlier social-card iterations. The active `public/images/custom/og-custom-v1.jpg` combines a generated architectural backdrop with the exact supplied wordmark and deterministic typography.
 

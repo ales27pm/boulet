@@ -19,7 +19,7 @@ export function GuidanceFigure({
     <figure className={classes}>
       <Image src={src} alt={alt} width={1536} height={1024} />
       <figcaption>
-        <strong>Image générée par IA</strong>
+        <strong>Mise en situation</strong>
         <span>{caption}</span>
       </figcaption>
     </figure>

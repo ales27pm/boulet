@@ -23,7 +23,7 @@ export const productFamilies = [
     imageAlt: "Façade contemporaine avec grandes fenêtres noires Boulet",
     conceptImage: "/images/custom/product-windows-concept-v1.webp",
     conceptImageAlt:
-      "Visualisation conceptuelle de fenêtres à battant noires sur une maison en brique",
+      "Maison fictive en brique avec fenêtres à battant noires, image d’inspiration",
     officialHref: `${officialSite}/13-fenetres`,
   },
   {
@@ -38,7 +38,7 @@ export const productFamilies = [
     imageAlt: "Porte d’entrée contemporaine Boulet baignée de lumière",
     conceptImage: "/images/custom/product-entry-concept-v1.webp",
     conceptImageAlt:
-      "Visualisation conceptuelle d’une porte d’entrée noire avec vitrage vertical",
+      "Entrée fictive en brique avec porte noire et vitrage vertical, image d’inspiration",
     officialHref: `${officialSite}/14-portes`,
   },
   {
@@ -53,7 +53,7 @@ export const productFamilies = [
     imageAlt: "Grande porte patio noire ouvrant sur une terrasse",
     conceptImage: "/images/custom/product-patio-concept-v1.webp",
     conceptImageAlt:
-      "Visualisation conceptuelle d’une porte patio noire donnant sur une terrasse",
+      "Terrasse fictive avec porte patio noire, image d’inspiration",
     officialHref: `${officialSite}/15-portes-patio`,
   },
   {
@@ -68,7 +68,7 @@ export const productFamilies = [
     imageAlt: "Deux portes de garage noires sur une maison contemporaine",
     conceptImage: "/images/custom/product-garage-concept-v1.webp",
     conceptImageAlt:
-      "Visualisation conceptuelle de portes de garage noires sur une maison en brique",
+      "Maison fictive en brique avec portes de garage noires, image d’inspiration",
     officialHref: `${officialSite}/16-portes-de-garage`,
   },
 ] as const;

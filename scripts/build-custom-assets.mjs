@@ -56,7 +56,7 @@ const textOverlay = Buffer.from(`
       Conseils · Mesures · Fabrication · Installation
     </text>
     <text x="64" y="574" fill="#374151" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="600" letter-spacing="0.7">
-      VISUEL CONCEPTUEL GÉNÉRÉ PAR IA · MAISON FICTIVE
+      IMAGE D’INSPIRATION · MAISON FICTIVE
     </text>
   </svg>
 `);
