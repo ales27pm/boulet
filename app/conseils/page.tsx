@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { GuidanceFigure } from "../components/GuidanceFigure";
 import { SiteLink as Link } from "../components/SiteLink";
 import { faqs } from "../site-data";
 
@@ -51,6 +52,12 @@ export default function AdvicePage() {
             dans le bon ordre évite de payer pour des options qui ne règlent pas
             votre besoin.
           </p>
+          <GuidanceFigure
+            className="page-hero-figure"
+            src="/images/custom/guide-materials-v1.webp"
+            alt="Mise en scène illustrative de profilés de fenêtre, d’un vitrage et d’un échantillon de quincaillerie"
+            caption="Échantillons fictifs; matériaux, vitrage et finitions à confirmer avec un conseiller."
+          />
         </div>
       </header>
 

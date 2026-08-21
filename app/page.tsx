@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { GuidanceFigure } from "./components/GuidanceFigure";
 import { SiteLink as Link } from "./components/SiteLink";
 import { productFamilies, projects, stats } from "./site-data";
 
@@ -84,29 +85,39 @@ export default function Home() {
           <div>
             <p className="eyebrow">Quatre familles de produits</p>
             <h2>Comparez selon votre projet.</h2>
+            <p className="asset-disclosure" id="product-visualization-note">
+              Visualisations générées par IA — modèles, dimensions, vitrage et
+              finitions à confirmer.
+            </p>
           </div>
           <Link className="text-link" href="/produits">
             Comparer toutes les options <span aria-hidden="true">→</span>
           </Link>
         </div>
-        <div className="shell product-grid">
+        <div
+          className="shell product-grid"
+          aria-describedby="product-visualization-note"
+        >
           {productFamilies.map((family) => (
             <article className="product-card" key={family.id}>
               <a href={`/produits#${family.id}`}>
                 <div className="product-image-wrap">
                   <Image
-                    src={family.image}
-                    alt={family.imageAlt}
-                    width={435}
-                    height={847}
+                    src={family.conceptImage}
+                    alt={family.conceptImageAlt}
+                    width={1122}
+                    height={1402}
                   />
-                  <span>{family.index}</span>
+                  <span className="product-index">{family.index}</span>
+                  <span className="product-ai-badge" aria-hidden="true">
+                    Visualisation IA
+                  </span>
                 </div>
                 <div className="product-card-copy">
                   <p>{family.note}</p>
                   <h3>{family.title}</h3>
                   <span className="circle-arrow" aria-hidden="true">
-                    ↗
+                    →
                   </span>
                 </div>
               </a>
@@ -126,6 +137,12 @@ export default function Home() {
               Notre équipe précise vos besoins, prend les mesures, fabrique sur
               mesure à Sorel-Tracy et installe.
             </p>
+            <GuidanceFigure
+              className="process-visual"
+              src="/images/custom/process-measure-v1.webp"
+              alt="Mise en scène illustrative d’une prise de mesures avant le remplacement d’une fenêtre"
+              caption="Personne et lieu fictifs; cette scène explique une étape du processus."
+            />
           </div>
           <ol className="process-list">
             <li>

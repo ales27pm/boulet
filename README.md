@@ -29,6 +29,8 @@ The project uses vinext and retains `.openai/hosting.json` for optional Sites de
 
 ## Asset provenance
 
-Product and project photographs are downloaded from the company's current public website for this redesign prototype. `public/og.png` is the first AI-generated social preview. `public/og-v2.png` is a non-destructive second iteration made with built-in Imagegen from that preview and the exact supplied wordmark; neither card is presented as a documented customer project.
+Product and named-project photographs are downloaded from the company's current public website for this redesign prototype and remain the site's factual proof. The separate custom guidance suite in `public/images/custom` was created with built-in Imagegen for category navigation, process explanation, quote and service preparation, and social sharing. Every generated scene is visibly disclosed in context and is never presented as a customer project, employee, product model, or facility. The exact prompts, source IDs, allowed contexts, and disclosure rules are recorded in `public/images/custom/ASSET-MANIFEST.md`.
+
+`public/og.png` and `public/og-v2.png` are retained earlier social-card iterations. The active `public/images/custom/og-custom-v1.jpg` combines a generated architectural backdrop with the exact supplied wordmark and deterministic typography.
 
 The Boulet wordmark in `public/images/boulet-wordmark.jpg` was supplied by the user and is preserved byte-for-byte. The interface uses the supplied brand tokens `#1a4c9a`, `#ef1115`, and `#e7e8ea`; red is reserved for accents where normal-sized text contrast would otherwise fall below WCAG AA.

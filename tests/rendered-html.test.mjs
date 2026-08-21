@@ -45,6 +45,14 @@ test("server-renders the redesigned French homepage", async () => {
   assert.match(html, /Commencez avec ce que vous savez déjà/);
   assert.match(html, /Ce qui nous aide à vous répondre/);
   assert.match(html, /Pas besoin d’avoir tout décidé/);
+  assert.match(html, /product-windows-concept-v1\.webp/);
+  assert.match(html, /product-entry-concept-v1\.webp/);
+  assert.match(html, /product-patio-concept-v1\.webp/);
+  assert.match(html, /product-garage-concept-v1\.webp/);
+  assert.match(html, /process-measure-v1\.webp/);
+  assert.match(html, /Visualisations générées par IA/);
+  assert.ok((html.match(/Visualisation IA/g) ?? []).length >= 4);
+  assert.match(html, /Personne et lieu fictifs/);
   assert.match(html, /href="\/soumission"/);
   assert.match(html, /href="\/service"/);
   assert.doesNotMatch(html, /hero-frame-system/);
@@ -52,7 +60,7 @@ test("server-renders the redesigned French homepage", async () => {
   assert.match(html, /alt="Boulet"/);
   assert.match(
     html,
-    /property="og:image" content="https:\/\/fenetresboulet\.com\/og-v2\.png"/i,
+    /property="og:image" content="https:\/\/fenetresboulet\.com\/images\/custom\/og-custom-v1\.jpg"/i,
   );
   assert.match(
     html,
@@ -90,6 +98,32 @@ test("server-renders every primary customer route", async () => {
   }
 });
 
+test("uses generated guidance without replacing factual product proof", async () => {
+  const productsResponse = await render("/produits");
+  const productsHtml = await productsResponse.text();
+  assert.match(productsHtml, /\/images\/fenetres-hybrides\.webp/);
+  assert.match(productsHtml, /\/images\/porte-acier\.webp/);
+  assert.doesNotMatch(productsHtml, /product-windows-concept-v1\.webp/);
+
+  const guidanceRoutes = [
+    ["/conseils", /guide-materials-v1\.webp/, /Échantillons fictifs/],
+    ["/service", /service-documentation-v1\.webp/, /aucune donnée client réelle/],
+    ["/soumission", /quote-preparation-v1\.webp/, /documents et projet fictifs/],
+  ];
+
+  for (const [pathname, imageMarker, disclosureMarker] of guidanceRoutes) {
+    const response = await render(pathname);
+    assert.equal(response.status, 200, pathname);
+    const html = await response.text();
+    assert.match(html, imageMarker, pathname);
+    assert.match(html, /Image générée par IA/, pathname);
+    assert.match(html, disclosureMarker, pathname);
+    if (pathname === "/service" || pathname === "/soumission") {
+      assert.match(html, /Vous continuerez sur fenetresboulet\.com/, pathname);
+    }
+  }
+});
+
 test("renders the window decision map as structured content", async () => {
   const response = await render("/produits");
   assert.equal(response.status, 200);
@@ -113,13 +147,21 @@ test("removes the starter preview and keeps required project assets", async () =
   for (const asset of [
     "public/favicon.ico",
     "public/og.png",
-    "public/og-v2.png",
+    "public/images/custom/og-custom-v1.jpg",
     "public/images/boulet-wordmark.jpg",
     "public/images/realisation-mes.webp",
     "public/images/fenetres-hybrides.webp",
     "public/images/porte-acier.webp",
     "public/images/porte-patio.webp",
     "public/images/porte-garage.webp",
+    "public/images/custom/product-windows-concept-v1.webp",
+    "public/images/custom/product-entry-concept-v1.webp",
+    "public/images/custom/product-patio-concept-v1.webp",
+    "public/images/custom/product-garage-concept-v1.webp",
+    "public/images/custom/process-measure-v1.webp",
+    "public/images/custom/guide-materials-v1.webp",
+    "public/images/custom/service-documentation-v1.webp",
+    "public/images/custom/quote-preparation-v1.webp",
   ]) {
     await access(new URL(asset, projectRoot));
   }
@@ -150,9 +192,11 @@ test("uses the supplied Boulet identity exactly", async () => {
     "f431b51b57f42038f633455a2dc35ba02b2e3e3d7cc559359bfbfc97371df630",
   );
 
-  const socialCard = await readFile(new URL("public/og-v2.png", projectRoot));
+  const socialCard = await readFile(
+    new URL("public/images/custom/og-custom-v1.jpg", projectRoot),
+  );
   assert.equal(
     createHash("sha256").update(socialCard).digest("hex"),
-    "1a8f6eb2db7d1d326fa45f3703386d24bfcd687b5eea2968740ba6a79347430a",
+    "40dd9b0d25fbbf83850580aae36f4ea3e7e3a565387e82e6c69e52da33db6495",
   );
 });

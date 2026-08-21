@@ -560,6 +560,16 @@ h2 {
   margin-bottom: 0;
 }
 
+.asset-disclosure {
+  max-width: 42rem;
+  margin: 1.2rem 0 0;
+  border-left: 3px solid var(--brand-red);
+  padding-left: 0.85rem;
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+
 .product-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -588,7 +598,7 @@ h2 {
   transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.product-image-wrap > span {
+.product-index {
   position: absolute;
   top: 1rem;
   left: 1rem;
@@ -600,6 +610,22 @@ h2 {
   background: var(--paper);
   font-family: var(--font-geist-mono);
   font-size: 0.68rem;
+}
+
+.product-ai-badge {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  border-left: 3px solid var(--brand-red);
+  padding: 0.48rem 0.62rem;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--brand-blue);
+  font-family: var(--font-geist-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  text-transform: uppercase;
 }
 
 .product-card-copy {
@@ -676,6 +702,50 @@ h2 {
   max-width: 31rem;
   margin-bottom: 2.2rem;
   color: var(--brand-gray);
+}
+
+.guidance-figure {
+  margin: 0;
+}
+
+.guidance-figure img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+
+.guidance-figure figcaption {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.75rem;
+  border-top: 2px solid var(--brand-red);
+  padding-top: 0.75rem;
+  color: var(--ink-soft);
+  font-size: 0.7rem;
+  line-height: 1.45;
+}
+
+.guidance-figure figcaption strong {
+  color: var(--brand-blue);
+  font-family: var(--font-geist-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.process-visual {
+  max-width: 34rem;
+  margin-top: 2.25rem;
+}
+
+.process-visual figcaption {
+  border-top-color: var(--white);
+  color: var(--brand-gray);
+}
+
+.process-visual figcaption strong {
+  color: var(--white);
 }
 
 .process-cta {
@@ -1086,6 +1156,16 @@ h2 {
 
 .page-hero-aside .button-row {
   margin-top: 1.8rem;
+}
+
+.external-handoff-note {
+  margin: 0.8rem 0 0;
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+}
+
+.page-hero-figure {
+  margin-top: 2rem;
 }
 
 .breadcrumb {

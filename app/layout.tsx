@@ -30,23 +30,23 @@ export const metadata: Metadata = {
     type: "website",
     locale: "fr_CA",
     siteName: "Portes et Fenêtres Boulet",
-    title: "Pensées ici. Fabriquées ici. Installées pour durer.",
+    title: "Votre projet de portes et fenêtres, de A à Z.",
     description:
       "Une entreprise familiale québécoise qui prend votre projet en main, de la mesure à l’installation.",
     images: [
       {
-        url: "/og-v2.png",
-        width: 1731,
-        height: 909,
-        alt: "Portes et Fenêtres Boulet — fabriquées au Québec depuis 1976",
+        url: "/images/custom/og-custom-v1.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Visuel conceptuel généré par IA — maison fictive aux fenêtres noires; aucune réalisation client n’est représentée.",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Pensées ici. Fabriquées ici. Installées pour durer.",
+    title: "Votre projet de portes et fenêtres, de A à Z.",
     description: "Portes et fenêtres fabriquées au Québec depuis 1976.",
-    images: ["/og-v2.png"],
+    images: ["/images/custom/og-custom-v1.jpg"],
   },
 };
 

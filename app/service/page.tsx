@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { GuidanceFigure } from "../components/GuidanceFigure";
 import { SiteLink as Link } from "../components/SiteLink";
 import { officialLinks } from "../site-data";
 
@@ -57,9 +58,18 @@ export default function ServicePage() {
           </p>
           <div className="button-row">
             <a className="button button-dark" href={officialLinks.service}>
-              Faire une demande de service <span aria-hidden="true">↗</span>
+              Ouvrir le formulaire officiel <span aria-hidden="true">↗</span>
             </a>
           </div>
+          <p className="external-handoff-note">
+            Vous continuerez sur fenetresboulet.com.
+          </p>
+          <GuidanceFigure
+            className="page-hero-figure"
+            src="/images/custom/service-documentation-v1.webp"
+            alt="Mise en scène illustrative d’une personne photographiant la quincaillerie d’une fenêtre"
+            caption="Personne, lieu et dossier fictifs; aucune donnée client réelle."
+          />
         </div>
       </header>
 

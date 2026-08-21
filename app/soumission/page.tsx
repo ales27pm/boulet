@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { GuidanceFigure } from "../components/GuidanceFigure";
 import { SiteLink as Link } from "../components/SiteLink";
 import { officialLinks } from "../site-data";
 
@@ -59,6 +60,15 @@ export default function QuotePage() {
               Ouvrir le formulaire officiel <span aria-hidden="true">↗</span>
             </a>
           </div>
+          <p className="external-handoff-note">
+            Vous continuerez sur fenetresboulet.com.
+          </p>
+          <GuidanceFigure
+            className="page-hero-figure"
+            src="/images/custom/quote-preparation-v1.webp"
+            alt="Mise en scène illustrative d’une personne préparant croquis, photos et mesures pour une soumission"
+            caption="Personne, documents et projet fictifs; plans et photos restent optionnels."
+          />
         </div>
       </header>
 
