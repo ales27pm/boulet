@@ -31,6 +31,7 @@ export function SiteFooter() {
           <p className="footer-heading">Nous joindre</p>
           <a href="tel:+14507429424">450 742-9424</a>
           <a href="mailto:info@fenetresboulet.com">info@fenetresboulet.com</a>
+          <a href={officialLinks.instagram}>Instagram · @fenetresboulet</a>
           <a href={officialLinks.maps}>
             10700, route Marie-Victorin
             <br />

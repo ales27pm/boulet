@@ -6,6 +6,7 @@ export const officialLinks = {
   warranty: `${officialSite}/content/2-garantie`,
   privacy: `${officialSite}/content/19-protection-des-renseignements-personnels-et-mentions-legales`,
   showroom: `${officialSite}/magasins`,
+  instagram: "https://www.instagram.com/fenetresboulet/",
   maps: "https://www.google.com/maps/place/Portes+et+Fen%C3%AAtres+Boulet/@46.0035516,-73.1694746,17z",
 };
 

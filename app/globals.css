@@ -1,19 +1,23 @@
 @import "tailwindcss";
 
 :root {
-  --ink: #17211e;
-  --ink-soft: #4d5753;
-  --forest: #173c35;
-  --forest-deep: #0f2d28;
-  --paper: #f2f0e9;
-  --paper-deep: #e5e1d7;
-  --white: #fffdf8;
-  --coral: #ef5b4e;
-  --coral-light: #ff8f84;
-  --coral-dark: #c83f35;
-  --line: rgba(23, 33, 30, 0.16);
-  --line-light: rgba(255, 253, 248, 0.2);
-  --shadow: 0 28px 70px rgba(16, 39, 34, 0.14);
+  --brand-blue: #1a4c9a;
+  --brand-red: #ef1115;
+  --brand-gray: #e7e8ea;
+  --logo-matte: #e6e6e8;
+  --ink: #111827;
+  --ink-soft: #374151;
+  --forest: var(--brand-blue);
+  --forest-deep: var(--brand-blue);
+  --paper: var(--brand-gray);
+  --paper-deep: var(--brand-gray);
+  --white: #ffffff;
+  --coral: var(--brand-red);
+  --coral-light: var(--white);
+  --coral-dark: var(--brand-blue);
+  --line: rgba(26, 76, 154, 0.22);
+  --line-light: rgba(255, 255, 255, 0.26);
+  --shadow: 0 28px 70px rgba(26, 76, 154, 0.16);
   --radius-sm: 0.25rem;
   --radius-md: 0.75rem;
   --radius-lg: 1.5rem;
@@ -78,8 +82,9 @@ a {
 }
 
 :focus-visible {
-  outline: 3px solid var(--coral);
-  outline-offset: 4px;
+  outline: 3px solid var(--white);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px var(--brand-blue);
 }
 
 h1,
@@ -196,7 +201,7 @@ h2 {
   z-index: 100;
   top: 0;
   border-bottom: 1px solid var(--line);
-  background: rgba(242, 240, 233, 0.94);
+  background: rgba(231, 232, 234, 0.96);
   backdrop-filter: blur(16px);
 }
 
@@ -210,48 +215,16 @@ h2 {
 
 .brand {
   display: inline-flex;
+  width: clamp(11.5rem, 15vw, 15rem);
   align-items: center;
-  gap: 0.8rem;
-}
-
-.brand-mark {
-  display: grid;
-  width: 2.85rem;
-  height: 3.25rem;
-  place-items: center;
   overflow: hidden;
-  border: 1px solid currentColor;
-  color: var(--coral);
+  background: var(--logo-matte);
+  line-height: 0;
 }
 
-.brand-mark span {
-  font-family: var(--font-display);
-  font-size: 2.6rem;
-  font-weight: 700;
-  line-height: 1;
-  transform: translateY(-0.04em);
-}
-
-.brand-copy {
-  display: flex;
-  flex-direction: column;
-  line-height: 1;
-}
-
-.brand-copy strong {
-  font-size: 1.15rem;
-  font-weight: 780;
-  letter-spacing: -0.04em;
-  text-transform: uppercase;
-}
-
-.brand-copy small {
-  margin-top: 0.4rem;
-  color: var(--ink-soft);
-  font-size: 0.62rem;
-  font-weight: 650;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+.brand-logo {
+  width: 100%;
+  height: auto;
 }
 
 .desktop-nav {
@@ -321,12 +294,15 @@ h2 {
 }
 
 .button-coral {
-  background: var(--coral);
-  color: #201714;
+  border-color: var(--brand-blue);
+  background: var(--brand-blue);
+  color: var(--white);
 }
 
 .button-coral:hover {
-  background: #ff6e60;
+  border-color: var(--brand-blue);
+  background: var(--white);
+  color: var(--brand-blue);
 }
 
 .button-dark {
@@ -335,7 +311,9 @@ h2 {
 }
 
 .button-dark:hover {
-  background: var(--forest);
+  border-color: var(--brand-blue);
+  background: var(--white);
+  color: var(--brand-blue);
 }
 
 .button-light {
@@ -403,7 +381,7 @@ h2 {
 }
 
 .hero-copy h1 em {
-  color: var(--coral-dark);
+  color: var(--brand-red);
   font-weight: inherit;
 }
 
@@ -453,7 +431,7 @@ h2 {
   right: -1.5rem;
   width: 54%;
   height: 55%;
-  border: 1px solid rgba(239, 91, 78, 0.6);
+  border: 1px solid rgba(239, 17, 21, 0.66);
   content: "";
 }
 
@@ -909,7 +887,7 @@ h2 {
 }
 
 .site-footer {
-  background: #0a1d19;
+  background: var(--brand-blue);
   color: rgba(255, 253, 248, 0.74);
 }
 
@@ -921,17 +899,13 @@ h2 {
 }
 
 .site-footer .brand {
-  color: var(--white);
-}
-
-.site-footer .brand-copy small {
-  color: rgba(255, 253, 248, 0.55);
+  width: min(100%, 15rem);
 }
 
 .footer-lead > p {
   max-width: 26rem;
   margin-top: 1.8rem;
-  color: rgba(255, 253, 248, 0.56);
+  color: var(--brand-gray);
 }
 
 .footer-grid > div:not(.footer-lead) {
@@ -990,7 +964,7 @@ h2 {
 }
 
 .page-hero h1 em {
-  color: var(--coral-dark);
+  color: var(--brand-red);
   font-weight: 400;
 }
 
@@ -1332,7 +1306,7 @@ h2 {
 }
 
 .accent-card span {
-  color: var(--coral);
+  color: var(--brand-gray);
 }
 
 .contact-card h2,
@@ -1654,21 +1628,8 @@ h2 {
     font-size: 0.96rem;
   }
 
-  .brand-copy strong {
-    font-size: 1rem;
-  }
-
-  .brand-copy small {
-    font-size: 0.55rem;
-  }
-
-  .brand-mark {
-    width: 2.45rem;
-    height: 2.85rem;
-  }
-
-  .brand-mark span {
-    font-size: 2.2rem;
+  .brand {
+    width: 10.75rem;
   }
 
   .hero {

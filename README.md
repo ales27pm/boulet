@@ -30,3 +30,5 @@ The project uses vinext and retains `.openai/hosting.json` for optional Sites de
 ## Asset provenance
 
 Product and project photographs are downloaded from the company's current public website for this redesign prototype. `public/og.png` is an AI-generated social preview; it is not presented as a documented customer project.
+
+The Boulet wordmark in `public/images/boulet-wordmark.jpg` was supplied by the user and is preserved byte-for-byte. The interface uses the supplied brand tokens `#1a4c9a`, `#ef1115`, and `#e7e8ea`; red is reserved for accents where normal-sized text contrast would otherwise fall below WCAG AA.

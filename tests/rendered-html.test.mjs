@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { access, readFile } from "node:fs/promises";
 import test from "node:test";
 
@@ -39,6 +40,8 @@ test("server-renders the redesigned French homepage", async () => {
   assert.match(html, /Votre projet, de A à Z/);
   assert.match(html, /href="\/soumission"/);
   assert.match(html, /href="\/service"/);
+  assert.match(html, /src="\/images\/boulet-wordmark\.jpg"/);
+  assert.match(html, /alt="Boulet"/);
   assert.match(
     html,
     /property="og:image" content="https:\/\/fenetresboulet\.com\/og\.png"/i,
@@ -87,6 +90,7 @@ test("removes the starter preview and keeps required project assets", async () =
   for (const asset of [
     "public/favicon.ico",
     "public/og.png",
+    "public/images/boulet-wordmark.jpg",
     "public/images/realisation-mes.webp",
     "public/images/fenetres-hybrides.webp",
     "public/images/porte-acier.webp",
@@ -95,4 +99,30 @@ test("removes the starter preview and keeps required project assets", async () =
   ]) {
     await access(new URL(asset, projectRoot));
   }
+});
+
+test("uses the supplied Boulet identity exactly", async () => {
+  const css = await readFile(new URL("app/globals.css", projectRoot), "utf8");
+  assert.match(css, /--brand-blue:\s*#1a4c9a;/i);
+  assert.match(css, /--brand-red:\s*#ef1115;/i);
+  assert.match(css, /--brand-gray:\s*#e7e8ea;/i);
+
+  for (const previousColor of [
+    "#173c35",
+    "#0f2d28",
+    "#f2f0e9",
+    "#e5e1d7",
+    "#ef5b4e",
+    "#c83f35",
+  ]) {
+    assert.doesNotMatch(css, new RegExp(previousColor, "i"));
+  }
+
+  const logo = await readFile(
+    new URL("public/images/boulet-wordmark.jpg", projectRoot),
+  );
+  assert.equal(
+    createHash("sha256").update(logo).digest("hex"),
+    "f431b51b57f42038f633455a2dc35ba02b2e3e3d7cc559359bfbfc97371df630",
+  );
 });
