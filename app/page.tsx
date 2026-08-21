@@ -34,18 +34,14 @@ export default function Home() {
           </ul>
         </div>
         <figure className="hero-media">
-          <Image
-            src="/images/realisation-mes.webp"
-            alt="Maison contemporaine avec fenêtres, porte et portes de garage noires"
-            width={1200}
-            height={800}
-            priority
-          />
-          <div className="hero-frame-system" aria-hidden="true">
-            <span />
-            <span />
-            <span />
-            <span />
+          <div className="hero-photo">
+            <Image
+              src="/images/realisation-mes.webp"
+              alt="Maison contemporaine avec fenêtres, porte et portes de garage noires"
+              width={1200}
+              height={800}
+              priority
+            />
           </div>
           <figcaption>
             <span>Votre projet, de A à Z</span>

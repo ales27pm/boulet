@@ -424,49 +424,18 @@ h2 {
   margin: 0;
 }
 
-.hero-media::before {
-  position: absolute;
-  z-index: -1;
-  top: -1.5rem;
-  right: -1.5rem;
-  width: 54%;
-  height: 55%;
-  border: 2px solid var(--brand-blue);
-  content: "";
+.hero-photo {
+  height: min(68vh, 770px);
+  overflow: hidden;
+  background: var(--white);
 }
 
-.hero-media img {
+.hero-photo img {
   width: 100%;
-  height: min(68vh, 770px);
+  height: 100%;
   object-fit: cover;
   object-position: center;
-}
-
-.hero-frame-system {
-  position: absolute;
-  z-index: 1;
-  top: clamp(1rem, 3vw, 2.8rem);
-  right: clamp(1rem, 3vw, 2.8rem);
-  display: grid;
-  width: clamp(8.75rem, 24%, 13.5rem);
-  aspect-ratio: 4 / 5;
-  grid-template-columns: 1.15fr 0.85fr;
-  grid-template-rows: 0.8fr 1.2fr;
-  gap: 0.24rem;
-  padding: 0.24rem;
-  background: var(--white);
-  box-shadow: 0 1rem 2.8rem rgba(17, 24, 39, 0.2);
-  pointer-events: none;
-}
-
-.hero-frame-system span {
-  border: 2px solid var(--brand-blue);
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.hero-frame-system span:last-child {
-  border-color: var(--brand-red);
-  background: var(--brand-red);
+  transform: scale(1.18);
 }
 
 .hero-media figcaption {
@@ -883,46 +852,9 @@ h2 {
 .quote-banner {
   position: relative;
   overflow: hidden;
+  border-top: 0.3rem solid var(--brand-red);
   background: var(--forest);
   color: var(--white);
-}
-
-.quote-banner::after {
-  position: absolute;
-  right: -3rem;
-  bottom: -4rem;
-  width: 25rem;
-  height: 19rem;
-  border: 2px solid rgba(255, 255, 255, 0.28);
-  background:
-    linear-gradient(
-      to right,
-      transparent calc(58% - 1px),
-      rgba(255, 255, 255, 0.28) calc(58% - 1px),
-      rgba(255, 255, 255, 0.28) calc(58% + 1px),
-      transparent calc(58% + 1px)
-    ),
-    linear-gradient(
-      to bottom,
-      transparent calc(43% - 1px),
-      rgba(255, 255, 255, 0.28) calc(43% - 1px),
-      rgba(255, 255, 255, 0.28) calc(43% + 1px),
-      transparent calc(43% + 1px)
-    );
-  content: "";
-  pointer-events: none;
-}
-
-.quote-banner::before {
-  position: absolute;
-  right: 1.5rem;
-  bottom: 1.5rem;
-  width: 7rem;
-  height: 7.5rem;
-  border: 0.28rem solid var(--white);
-  background: var(--brand-red);
-  content: "";
-  pointer-events: none;
 }
 
 .quote-banner-inner {
@@ -935,6 +867,18 @@ h2 {
   max-width: 13ch;
   margin-bottom: 2.5rem;
   font-size: clamp(3rem, 6vw, 6.3rem);
+}
+
+.quote-banner .button-coral {
+  border-color: var(--white);
+  background: var(--white);
+  color: var(--brand-blue);
+}
+
+.quote-banner .button-coral:hover {
+  border-color: var(--brand-gray);
+  background: var(--brand-gray);
+  color: var(--brand-blue);
 }
 
 .site-footer {
@@ -1692,9 +1636,27 @@ h2 {
     font-size: clamp(3.9rem, 14vw, 6.8rem);
   }
 
-  .hero-media,
-  .hero-media img {
-    height: min(72vh, 650px);
+  .hero-media {
+    height: auto;
+    min-height: 0;
+  }
+
+  .hero-photo {
+    height: auto;
+    aspect-ratio: 4 / 5;
+  }
+
+  .hero-photo img {
+    height: 100%;
+  }
+
+  .hero-media figcaption {
+    position: static;
+    width: 100%;
+    min-height: 0;
+    border-top: 2px solid var(--brand-blue);
+    padding: 1.1rem 0 0;
+    background: transparent;
   }
 
   .stats-grid {
@@ -1826,21 +1788,6 @@ h2 {
     font-size: clamp(3.15rem, 15vw, 5rem);
   }
 
-  .hero-media,
-  .hero-media img {
-    height: 30rem;
-  }
-
-  .hero-media::before {
-    top: -0.7rem;
-    right: -0.7rem;
-  }
-
-  .hero-media figcaption {
-    width: 92%;
-    min-height: 6rem;
-  }
-
   .stats-grid strong {
     font-size: 2rem;
   }
@@ -1873,10 +1820,6 @@ h2 {
     grid-template-columns: 1fr;
   }
 
-  .hero-frame-system {
-    width: 8.5rem;
-  }
-
   .decision-prompt {
     min-height: 16rem;
   }
@@ -1890,9 +1833,32 @@ h2 {
     flex-direction: column;
   }
 
+  .quote-banner-inner {
+    padding-block: 4.5rem;
+  }
+
+  .quote-banner h2 {
+    margin-bottom: 2rem;
+    font-size: clamp(2.65rem, 12vw, 3.5rem);
+  }
+
+  .quote-banner .button-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .site-footer .brand {
+    width: 9.5rem;
+  }
+
   .project-strip img,
   .project-strip .project-featured img {
     height: 27rem;
+  }
+
+  .proof-image::after {
+    right: -0.5rem;
+    bottom: -0.5rem;
   }
 
   .footer-grid {

@@ -40,6 +40,7 @@ test("server-renders the redesigned French homepage", async () => {
   assert.match(html, /Votre projet, de A à Z/);
   assert.match(html, /href="\/soumission"/);
   assert.match(html, /href="\/service"/);
+  assert.doesNotMatch(html, /hero-frame-system/);
   assert.match(html, /src="\/images\/boulet-wordmark\.jpg"/);
   assert.match(html, /alt="Boulet"/);
   assert.match(
