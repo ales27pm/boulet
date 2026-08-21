@@ -35,7 +35,7 @@ export const metadata: Metadata = {
       "Une entreprise familiale québécoise qui prend votre projet en main, de la mesure à l’installation.",
     images: [
       {
-        url: "/og.png",
+        url: "/og-v2.png",
         width: 1731,
         height: 909,
         alt: "Portes et Fenêtres Boulet — fabriquées au Québec depuis 1976",
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Pensées ici. Fabriquées ici. Installées pour durer.",
     description: "Portes et fenêtres fabriquées au Québec depuis 1976.",
-    images: ["/og.png"],
+    images: ["/og-v2.png"],
   },
 };
 

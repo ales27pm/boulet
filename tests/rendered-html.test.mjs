@@ -44,7 +44,7 @@ test("server-renders the redesigned French homepage", async () => {
   assert.match(html, /alt="Boulet"/);
   assert.match(
     html,
-    /property="og:image" content="https:\/\/fenetresboulet\.com\/og\.png"/i,
+    /property="og:image" content="https:\/\/fenetresboulet\.com\/og-v2\.png"/i,
   );
   assert.match(
     html,
@@ -82,6 +82,21 @@ test("server-renders every primary customer route", async () => {
   }
 });
 
+test("renders the window decision map as structured content", async () => {
+  const response = await render("/produits");
+  assert.equal(response.status, 200);
+
+  const html = await response.text();
+  assert.match(html, /aria-labelledby="window-choice-title"/);
+  assert.match(html, /<h2 id="window-choice-title">Le bon geste/);
+  assert.match(html, /<figure class="decision-map">/);
+  assert.match(html, /<dl class="decision-grid">/);
+  assert.match(html, /Quelle priorité décrit le mieux votre situation\?/);
+  assert.match(html, /Étanchéité et ventilation contrôlée/);
+  assert.match(html, /Le vitrage, l’intercalaire et la configuration complète/);
+  assert.doesNotMatch(html, /role="img"[^>]*decision-map/);
+});
+
 test("removes the starter preview and keeps required project assets", async () => {
   const packageJson = await readFile(new URL("package.json", projectRoot), "utf8");
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
@@ -90,6 +105,7 @@ test("removes the starter preview and keeps required project assets", async () =
   for (const asset of [
     "public/favicon.ico",
     "public/og.png",
+    "public/og-v2.png",
     "public/images/boulet-wordmark.jpg",
     "public/images/realisation-mes.webp",
     "public/images/fenetres-hybrides.webp",
@@ -124,5 +140,11 @@ test("uses the supplied Boulet identity exactly", async () => {
   assert.equal(
     createHash("sha256").update(logo).digest("hex"),
     "f431b51b57f42038f633455a2dc35ba02b2e3e3d7cc559359bfbfc97371df630",
+  );
+
+  const socialCard = await readFile(new URL("public/og-v2.png", projectRoot));
+  assert.equal(
+    createHash("sha256").update(socialCard).digest("hex"),
+    "1a8f6eb2db7d1d326fa45f3703386d24bfcd687b5eea2968740ba6a79347430a",
   );
 });

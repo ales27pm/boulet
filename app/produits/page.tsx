@@ -66,26 +66,49 @@ export default function ProductsPage() {
         </div>
       </section>
 
-      <section className="section shell">
+      <section
+        className="section shell window-choice"
+        aria-labelledby="window-choice-title"
+      >
         <div className="section-heading horizontal-heading">
           <div>
             <p className="eyebrow">Fenêtres: quatre mouvements</p>
-            <h2>Le bon geste pour la bonne pièce.</h2>
+            <h2 id="window-choice-title">Le bon geste pour la bonne pièce.</h2>
           </div>
           <Link className="text-link" href="/conseils">
             Lire le guide d’achat <span aria-hidden="true">→</span>
           </Link>
         </div>
-        <div className="compare-grid">
-          {windowStyles.map((style, index) => (
-            <article className="compare-card" key={style.name}>
-              <span>0{index + 1}</span>
-              <h3>{style.name}</h3>
-              <strong>{style.bestFor}</strong>
-              <p>{style.description}</p>
-            </article>
-          ))}
-        </div>
+        <figure className="decision-map">
+          <div className="decision-prompt">
+            <span aria-hidden="true">Point de départ</span>
+            <p>Quelle priorité décrit le mieux votre situation?</p>
+          </div>
+          <div className="decision-connector" aria-hidden="true" />
+          <dl className="decision-grid">
+            {windowStyles.map((style, index) => (
+              <div className="decision-option" key={style.name}>
+                <span className="decision-index" aria-hidden="true">
+                  0{index + 1}
+                </span>
+                <dt>{style.bestFor}</dt>
+                <dd>
+                  <h3>{style.name}</h3>
+                  <p>{style.description}</p>
+                </dd>
+              </div>
+            ))}
+          </dl>
+          <figcaption className="decision-caption">
+            <p>
+              Le vitrage, l’intercalaire et la configuration complète
+              influencent aussi le rendement final.
+            </p>
+            <Link className="button button-dark" href="/soumission">
+              Demander conseil <span aria-hidden="true">↗</span>
+            </Link>
+          </figcaption>
+        </figure>
       </section>
 
       <section className="quote-banner">

@@ -41,6 +41,12 @@ export default function Home() {
             height={800}
             priority
           />
+          <div className="hero-frame-system" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+            <span />
+          </div>
           <figcaption>
             <span>Votre projet, de A à Z</span>
             Prise de mesures · Fabrication · Installation
