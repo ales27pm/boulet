@@ -38,6 +38,13 @@ test("server-renders the redesigned French homepage", async () => {
   assert.match(html, /Installées pour durer\./);
   assert.match(html, /Manufacturier québécois depuis 1976/);
   assert.match(html, /Votre projet, de A à Z/);
+  assert.match(html, /Bien choisir ses fenêtres/);
+  assert.match(html, /Voici comment le projet avance/);
+  assert.match(html, /Une entreprise familiale à Sorel-Tracy depuis 1976/);
+  assert.match(html, /aria-labelledby="quote-home-title"/);
+  assert.match(html, /Commencez avec ce que vous savez déjà/);
+  assert.match(html, /Ce qui nous aide à vous répondre/);
+  assert.match(html, /Pas besoin d’avoir tout décidé/);
   assert.match(html, /href="\/soumission"/);
   assert.match(html, /href="\/service"/);
   assert.doesNotMatch(html, /hero-frame-system/);

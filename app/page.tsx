@@ -21,17 +21,12 @@ export default function Home() {
           </p>
           <div className="button-row">
             <Link className="button button-dark" href="/soumission">
-              Parler de mon projet <span aria-hidden="true">↗</span>
+              Préparer ma demande <span aria-hidden="true">→</span>
             </Link>
             <Link className="text-link" href="/produits">
               Explorer les produits <span aria-hidden="true">→</span>
             </Link>
           </div>
-          <ul className="hero-proof" aria-label="Points de confiance">
-            <li>Fabrication 100 % québécoise</li>
-            <li>Produits ENERGY STAR offerts</li>
-            <li>Licence RBQ 8246-5071-36</li>
-          </ul>
         </div>
         <figure className="hero-media">
           <div className="hero-photo">
@@ -48,6 +43,11 @@ export default function Home() {
             Prise de mesures · Fabrication · Installation
           </figcaption>
         </figure>
+        <ul className="hero-proof" aria-label="Points de confiance">
+          <li>Fabrication 100 % québécoise</li>
+          <li>Produits ENERGY STAR offerts</li>
+          <li>Licence RBQ 8246-5071-36</li>
+        </ul>
       </section>
 
       <section className="stats-band" aria-label="Boulet en chiffres">
@@ -63,19 +63,18 @@ export default function Home() {
 
       <section className="section shell opening-statement">
         <div>
-          <p className="eyebrow">Une maison mieux habitée</p>
-          <h2>L’ouverture change tout.</h2>
+          <p className="eyebrow">Bien choisir ses fenêtres</p>
+          <h2>Comparez selon la pièce et l’usage.</h2>
         </div>
         <div>
           <p className="large-copy">
-            La bonne fenêtre ne se résume pas à un profil. Elle transforme la
-            lumière, le silence, la température et la façon dont une pièce se
-            vit au quotidien.
+            Battant, auvent, coulissante ou guillotine : chaque type de fenêtre
+            s’ouvre, ventile et s’intègre différemment à la pièce.
           </p>
           <p>
-            Notre rôle est de faire tenir ensemble l’architecture, la
-            performance et la réalité du chantier — sans vous perdre dans le
-            catalogue.
+            Le vitrage, l’intercalaire et la configuration complète influencent
+            aussi le rendement final. Notre équipe vous aide à faire les bons
+            choix pour votre maison.
           </p>
         </div>
       </section>
@@ -83,8 +82,8 @@ export default function Home() {
       <section className="section products-section" id="produits">
         <div className="shell section-heading horizontal-heading">
           <div>
-            <p className="eyebrow">Quatre familles, un même niveau d’attention</p>
-            <h2>Choisissez par usage, pas par jargon.</h2>
+            <p className="eyebrow">Quatre familles de produits</p>
+            <h2>Comparez selon votre projet.</h2>
           </div>
           <Link className="text-link" href="/produits">
             Comparer toutes les options <span aria-hidden="true">→</span>
@@ -119,15 +118,14 @@ export default function Home() {
       <section className="section process-section" id="methode">
         <div className="shell process-grid">
           <div className="process-intro">
-            <p className="eyebrow eyebrow-light">Du premier croquis au dernier joint</p>
-            <h2>Un projet simple à suivre.</h2>
-            <p>
-              Un seul fil conducteur, des décisions au bon moment et une
-              équipe qui connaît le produit jusque dans sa fabrication.
+            <p className="eyebrow eyebrow-light">
+              De la prise de mesures à l’installation
             </p>
-            <Link className="button button-light" href="/soumission">
-              Préparer mon projet
-            </Link>
+            <h2>Voici comment le projet avance.</h2>
+            <p>
+              Notre équipe précise vos besoins, prend les mesures, fabrique sur
+              mesure à Sorel-Tracy et installe.
+            </p>
           </div>
           <ol className="process-list">
             <li>
@@ -159,6 +157,9 @@ export default function Home() {
               </div>
             </li>
           </ol>
+          <Link className="button button-light process-cta" href="/soumission">
+            Préparer ma demande <span aria-hidden="true">→</span>
+          </Link>
         </div>
       </section>
 
@@ -173,12 +174,12 @@ export default function Home() {
           <p>Les Habitations Paris &amp; Frères · Trois-Rivières</p>
         </div>
         <div className="proof-copy">
-          <p className="eyebrow">Une signature qui traverse les générations</p>
-          <h2>Depuis 1976, la même idée: bien faire, complètement.</h2>
+          <p className="eyebrow">Trois générations</p>
+          <h2>Une entreprise familiale à Sorel-Tracy depuis 1976.</h2>
           <p>
-            De l’atelier familial fondé par Eddy Boulet à une équipe de plus de
-            120 personnes, l’entreprise a grandi sans séparer le produit du
-            service qui l’accompagne.
+            Fondée par Eddy Boulet, l’entreprise compte aujourd’hui plus de 120
+            membres d’équipe et plus de 100 000 pi² consacrés à la fabrication,
+            au développement de produits et au service.
           </p>
           <div className="assurance-grid">
             <div>
@@ -233,18 +234,51 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="quote-banner">
-        <div className="shell quote-banner-inner">
-          <p className="eyebrow eyebrow-light">Votre maison mérite une réponse précise</p>
-          <h2>Parlons des ouvertures qui vont vraiment changer votre quotidien.</h2>
-          <div className="button-row">
-            <Link className="button button-coral" href="/soumission">
-              Commencer ma demande <span aria-hidden="true">↗</span>
-            </Link>
-            <a className="text-link text-link-light" href="tel:+14507429424">
-              450 742-9424
-            </a>
+      <section
+        className="quote-banner quote-banner-home"
+        aria-labelledby="quote-home-title"
+      >
+        <div className="shell quote-banner-inner quote-conversation">
+          <div className="quote-conversation-copy">
+            <p className="eyebrow eyebrow-light">
+              Un projet de portes ou de fenêtres?
+            </p>
+            <h2 id="quote-home-title">Commencez avec ce que vous savez déjà.</h2>
+            <p className="quote-conversation-intro">
+              Dites-nous s’il s’agit d’une rénovation ou d’une construction
+              neuve, ce qui compte pour vous et quand vous aimeriez réaliser les
+              travaux. Les plans et les photos restent optionnels.
+            </p>
+            <div className="button-row">
+              <Link className="button button-coral" href="/soumission">
+                Préparer ma demande <span aria-hidden="true">→</span>
+              </Link>
+              <a className="text-link text-link-light" href="tel:+14507429424">
+                Appeler au 450 742-9424
+              </a>
+            </div>
           </div>
+          <aside
+            className="quote-starting-points"
+            aria-labelledby="quote-starting-title"
+          >
+            <h3 id="quote-starting-title">Ce qui nous aide à vous répondre</h3>
+            <ul>
+              <li>
+                <strong>Votre projet</strong>
+                <span>Rénovation ou construction neuve</span>
+              </li>
+              <li>
+                <strong>Vos priorités</strong>
+                <span>Inconforts, résultat souhaité et échéancier</span>
+              </li>
+              <li>
+                <strong>Ce que vous avez</strong>
+                <span>Quantités, dimensions, plans ou photos, si disponibles</span>
+              </li>
+            </ul>
+            <p>Pas besoin d’avoir tout décidé.</p>
+          </aside>
         </div>
       </section>
     </main>

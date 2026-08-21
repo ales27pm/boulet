@@ -363,15 +363,22 @@ h2 {
 .hero {
   display: grid;
   min-height: calc(100vh - 8rem);
+  grid-template-areas:
+    "copy media"
+    "proof media";
   grid-template-columns: minmax(0, 0.92fr) minmax(32rem, 1.08fr);
+  grid-template-rows: auto auto;
   align-items: center;
-  gap: clamp(2.5rem, 6vw, 7rem);
+  align-content: center;
+  column-gap: clamp(2.5rem, 6vw, 7rem);
+  row-gap: 2.4rem;
   padding-block: clamp(4rem, 8vw, 7rem);
 }
 
 .hero-copy {
   position: relative;
   z-index: 2;
+  grid-area: copy;
 }
 
 .hero-copy h1 {
@@ -395,9 +402,10 @@ h2 {
 
 .hero-proof {
   display: flex;
+  grid-area: proof;
   flex-wrap: wrap;
   gap: 0.75rem 1.25rem;
-  margin: 2.4rem 0 0;
+  margin: 0;
   padding: 0;
   color: var(--ink-soft);
   font-size: 0.75rem;
@@ -420,6 +428,7 @@ h2 {
 
 .hero-media {
   position: relative;
+  grid-area: media;
   min-height: min(68vh, 770px);
   margin: 0;
 }
@@ -648,7 +657,8 @@ h2 {
 .process-grid {
   display: grid;
   grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-  gap: clamp(3rem, 10vw, 10rem);
+  column-gap: clamp(3rem, 10vw, 10rem);
+  row-gap: 2.5rem;
 }
 
 .process-intro {
@@ -665,7 +675,12 @@ h2 {
 .process-intro > p:not(.eyebrow) {
   max-width: 31rem;
   margin-bottom: 2.2rem;
-  color: rgba(255, 253, 248, 0.7);
+  color: var(--brand-gray);
+}
+
+.process-cta {
+  grid-column: 2;
+  justify-self: start;
 }
 
 .process-list {
@@ -704,7 +719,7 @@ h2 {
 
 .process-list p {
   margin: 0;
-  color: rgba(255, 253, 248, 0.66);
+  color: var(--brand-gray);
 }
 
 .proof-section {
@@ -879,6 +894,105 @@ h2 {
   border-color: var(--brand-gray);
   background: var(--brand-gray);
   color: var(--brand-blue);
+}
+
+.quote-banner-home {
+  background: var(--brand-gray);
+  color: var(--ink);
+}
+
+.quote-conversation {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(23rem, 0.72fr);
+  align-items: center;
+  gap: clamp(3rem, 8vw, 8rem);
+}
+
+.quote-banner-home h2 {
+  max-width: 11ch;
+  margin-bottom: 1.6rem;
+  font-size: clamp(3rem, 5.2vw, 5.8rem);
+}
+
+.quote-banner-home .eyebrow-light,
+.quote-banner-home .text-link-light {
+  color: var(--brand-blue);
+}
+
+.quote-conversation-intro {
+  max-width: 42rem;
+  margin-bottom: 2.1rem;
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+}
+
+.quote-banner-home .button-coral {
+  border-color: var(--brand-blue);
+  background: var(--brand-blue);
+  color: var(--white);
+}
+
+.quote-banner-home .button-coral:hover {
+  border-color: var(--brand-blue);
+  background: var(--white);
+  color: var(--brand-blue);
+}
+
+.quote-starting-points {
+  min-width: 0;
+  border: 1px solid var(--brand-blue);
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  background: var(--white);
+}
+
+.quote-starting-points h3 {
+  margin-bottom: 1.2rem;
+  color: var(--brand-blue);
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  font-weight: 760;
+  letter-spacing: 0.1em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.quote-starting-points ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.quote-starting-points li {
+  display: grid;
+  grid-template-columns: minmax(7.5rem, 0.78fr) minmax(0, 1.22fr);
+  gap: 1rem;
+  border-top: 1px solid var(--line);
+  padding-block: 1rem;
+}
+
+.quote-starting-points strong,
+.quote-starting-points span {
+  min-width: 0;
+}
+
+.quote-starting-points strong {
+  color: var(--ink);
+  font-size: 0.87rem;
+}
+
+.quote-starting-points span {
+  color: var(--ink-soft);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.quote-starting-points > p {
+  margin: 0.35rem 0 0;
+  padding: 0.8rem 1rem;
+  background: var(--brand-blue);
+  color: var(--white);
+  font-size: 0.86rem;
+  font-weight: 720;
 }
 
 .site-footer {
@@ -1628,7 +1742,13 @@ h2 {
 
   .hero {
     min-height: auto;
+    grid-template-areas:
+      "copy"
+      "media"
+      "proof";
     grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    row-gap: 2.5rem;
     padding-top: 4rem;
   }
 
@@ -1694,11 +1814,49 @@ h2 {
   }
 
   .proof-section {
-    gap: 4rem;
+    gap: 2.5rem;
   }
 
   .proof-image img {
     aspect-ratio: 4 / 3;
+  }
+
+  .proof-image::after {
+    content: none;
+  }
+
+  .proof-image p {
+    position: static;
+    padding: 0.8rem 0 0;
+    background: transparent;
+  }
+
+  .proof-copy h2 {
+    font-size: clamp(2.6rem, 10.5vw, 3.5rem);
+  }
+
+  .process-cta {
+    grid-column: auto;
+  }
+
+  .process-list li {
+    min-height: 0;
+    grid-template-columns: 2.5rem 1fr;
+    gap: 0.75rem;
+    padding-block: 1.4rem;
+  }
+
+  .process-list > li > span {
+    padding-top: 0.45rem;
+  }
+
+  .process-list h3 {
+    font-size: clamp(1.8rem, 8vw, 2.2rem);
+  }
+
+  .quote-conversation {
+    grid-template-columns: 1fr;
+    gap: 3rem;
   }
 
   .project-strip {
@@ -1785,7 +1943,7 @@ h2 {
   }
 
   .hero-copy h1 {
-    font-size: clamp(3.15rem, 15vw, 5rem);
+    font-size: clamp(3rem, 12.8vw, 4.75rem);
   }
 
   .stats-grid strong {
@@ -1811,7 +1969,7 @@ h2 {
   }
 
   .process-list li {
-    grid-template-columns: 3.5rem 1fr;
+    grid-template-columns: 2.5rem 1fr;
   }
 
   .assurance-grid,
@@ -1840,6 +1998,16 @@ h2 {
   .quote-banner h2 {
     margin-bottom: 2rem;
     font-size: clamp(2.65rem, 12vw, 3.5rem);
+  }
+
+  .quote-banner-home h2 {
+    max-width: 14ch;
+    font-size: clamp(2.5rem, 10.5vw, 3.4rem);
+  }
+
+  .quote-starting-points li {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
   }
 
   .quote-banner .button-row {
