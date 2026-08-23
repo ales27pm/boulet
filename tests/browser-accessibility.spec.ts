@@ -109,6 +109,49 @@ test("an internal Link navigates without reloading the document", async ({
   ).toBe("preserved");
 });
 
+test("WebP delivery preserves MIME, bytes and revalidation", async ({
+  page,
+  request,
+}) => {
+  const paths = [
+    "/media/images/boulet-wordmark-480.webp",
+    "/media/images/catalog-delivery/fenetres/57-battant-echo-pvc/421-battant-echo-pvc-1440w.webp",
+  ];
+
+  for (const path of paths) {
+    const response = await request.get(path);
+    expect(response.status(), path).toBe(200);
+    expect(response.headers()["content-type"], path).toMatch(/^image\/webp\b/);
+    expect(response.headers()["x-content-type-options"], path).toBe("nosniff");
+    const bytes = await response.body();
+    expect(bytes.subarray(0, 4).toString("ascii"), path).toBe("RIFF");
+    expect(bytes.subarray(8, 12).toString("ascii"), path).toBe("WEBP");
+
+    const etag = response.headers().etag;
+    expect(etag, path).toBeTruthy();
+    const revalidated = await request.get(path, {
+      failOnStatusCode: false,
+      headers: { "if-none-match": etag },
+    });
+    expect(revalidated.status(), path).toBe(304);
+    expect(revalidated.headers()["content-type"], path).toMatch(/^image\/webp\b/);
+    expect(revalidated.headers()["x-content-type-options"], path).toBe("nosniff");
+  }
+
+  await page.goto("/produits/fenetres/57-battant-echo-pvc", {
+    waitUntil: "networkidle",
+  });
+  const primaryImage = page.locator(".product-detail-primary-media img");
+  await expect(primaryImage).toBeVisible();
+  expect(
+    await primaryImage.evaluate(
+      (image) =>
+        (image as HTMLImageElement).complete &&
+        (image as HTMLImageElement).naturalWidth > 0,
+    ),
+  ).toBe(true);
+});
+
 test("catalogue filters and legacy category context work with assistive labels", async ({
   page,
 }) => {

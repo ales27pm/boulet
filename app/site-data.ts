@@ -18,9 +18,9 @@ export const productFamilies = [
     description:
       "Battant, auvent, coulissante ou guillotine — en PVC ou hybride, avec vitrage double ou triple selon vos priorités.",
     note: "Confort, lumière, rendement",
-    image: "/images/fenetres-hybrides.webp",
+    image: "/media/images/fenetres-hybrides.webp",
     imageAlt: "Façade contemporaine avec grandes fenêtres noires Boulet",
-    conceptImage: "/images/custom/product-windows-concept-v1.webp",
+    conceptImage: "/media/images/custom/product-windows-concept-v1.webp",
     conceptImageAlt:
       "Maison fictive en brique avec fenêtres à battant noires, image d’inspiration",
   },
@@ -31,9 +31,9 @@ export const productFamilies = [
     description:
       "Acier, vitrage décoratif et quincaillerie réunis dans une composition cohérente avec l’architecture de la maison.",
     note: "Présence, sécurité, lumière",
-    image: "/images/porte-acier.webp",
+    image: "/media/images/porte-acier.webp",
     imageAlt: "Porte d’entrée contemporaine Boulet baignée de lumière",
-    conceptImage: "/images/custom/product-entry-concept-v1.webp",
+    conceptImage: "/media/images/custom/product-entry-concept-v1.webp",
     conceptImageAlt:
       "Entrée fictive en brique avec porte noire et vitrage vertical, image d’inspiration",
   },
@@ -44,9 +44,9 @@ export const productFamilies = [
     description:
       "Tout-PVC, aluminium ou hybride pour ouvrir la maison sur l’extérieur sans compromettre la performance.",
     note: "Ouverture, fluidité, performance",
-    image: "/images/porte-patio.webp",
+    image: "/media/images/porte-patio.webp",
     imageAlt: "Grande porte patio noire ouvrant sur une terrasse",
-    conceptImage: "/images/custom/product-patio-concept-v1.webp",
+    conceptImage: "/media/images/custom/product-patio-concept-v1.webp",
     conceptImageAlt:
       "Terrasse fictive avec porte patio noire, image d’inspiration",
   },
@@ -57,9 +57,9 @@ export const productFamilies = [
     description:
       "Des profils sobres ou expressifs, distribués et intégrés au projet pour une façade pensée comme un tout.",
     note: "Façade, isolation, usage",
-    image: "/images/porte-garage.webp",
+    image: "/media/images/porte-garage.webp",
     imageAlt: "Deux portes de garage noires sur une maison contemporaine",
-    conceptImage: "/images/custom/product-garage-concept-v1.webp",
+    conceptImage: "/media/images/custom/product-garage-concept-v1.webp",
     conceptImageAlt:
       "Maison fictive en brique avec portes de garage noires, image d’inspiration",
   },
@@ -70,21 +70,21 @@ export const projects = [
     title: "Les Habitations Paris & Frères",
     location: "Trois-Rivières",
     type: "Multirésidentiel contemporain",
-    image: "/images/realisation-paris-freres.webp",
+    image: "/media/images/realisation-paris-freres.webp",
     alt: "Projet multirésidentiel en pierre avec fenêtres et portes noires",
   },
   {
     title: "M.E.S Habitations",
     location: "Varennes",
     type: "Maison contemporaine",
-    image: "/images/realisation-mes.webp",
+    image: "/media/images/realisation-mes.webp",
     alt: "Maison contemporaine avec grandes fenêtres et portes de garage noires",
   },
   {
     title: "Capricor",
     location: "Trois-Rivières",
     type: "Rénovation résidentielle",
-    image: "/images/realisation-capricor.webp",
+    image: "/media/images/realisation-capricor.webp",
     alt: "Maison de plain-pied rénovée avec fenêtres noires",
   },
 ] as const;

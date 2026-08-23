@@ -14,7 +14,7 @@ const officialGalleryNumbers = [
 
 export const officialGallery = officialGalleryNumbers.map((number) => ({
   id: `realisation-${number}`,
-  image: `/images/realisations-officielles/realisation-boulet-${number}.webp`,
+  image: `/media/images/realisations-officielles/realisation-boulet-${number}.webp`,
   imageAlt: `Réalisation avec des produits Boulet, vue ${number} de la galerie officielle`,
 }));
 

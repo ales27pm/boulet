@@ -6,7 +6,7 @@ export function Brand() {
     <Link className="brand" href="/">
       <Image
         className="brand-logo"
-        src="/images/boulet-wordmark-480.webp"
+        src="/media/images/boulet-wordmark-480.webp"
         width={480}
         height={83}
         alt="Boulet"

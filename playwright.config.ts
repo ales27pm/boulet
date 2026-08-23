@@ -17,7 +17,7 @@ export default defineConfig({
   },
   webServer: {
     command:
-      "npm run start -- --hostname 127.0.0.1 --port 4173",
+      "npm exec --offline -- wrangler dev --config dist/server/wrangler.json --local --port 4173",
     url: "http://127.0.0.1:4173",
     reuseExistingServer: false,
     timeout: 60_000,

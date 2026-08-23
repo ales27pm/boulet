@@ -71,7 +71,7 @@ export default function ServicePage() {
           </div>
           <GuidanceFigure
             className="page-hero-figure"
-            src="/images/custom/service-documentation-v1.webp"
+            src="/media/images/custom/service-documentation-v1.webp"
             alt="Mise en scène illustrative d’une personne photographiant la quincaillerie d’une fenêtre"
             caption="Personne, lieu et dossier fictifs; aucune donnée client réelle."
           />

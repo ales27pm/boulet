@@ -55,7 +55,7 @@ export default function AdvicePage() {
           </p>
           <GuidanceFigure
             className="page-hero-figure"
-            src="/images/custom/guide-materials-v1.webp"
+            src="/media/images/custom/guide-materials-v1.webp"
             alt="Mise en scène illustrative de profilés de fenêtre, d’un vitrage et d’un échantillon de quincaillerie"
             caption="Échantillons fictifs; matériaux, vitrage et finitions à confirmer avec un conseiller."
           />

@@ -31,7 +31,7 @@ npm run check:links
 npm run assets:catalog:check
 ```
 
-Le projet utilise Vinext et conserve `.openai/hosting.json` pour Sites. La navigation interne utilise `next/link`; les images de contenu utilisent `next/image`. Le mot-symbole Boulet emploie un WebP statique de 480 px afin de ne pas dépendre d’un optimiseur dynamique. Le Worker accepte aussi les deux chemins d’optimisation Vinext (`/_next/image` et `/_vinext/image`) lorsque le binding est disponible.
+Le projet utilise Vinext et conserve `.openai/hosting.json` pour Sites. La navigation interne utilise `next/link`; les images de contenu utilisent `next/image`. Le mot-symbole Boulet emploie un WebP statique de 480 px afin de ne pas dépendre d’un optimiseur dynamique. Les URL `/media/images/*.webp` passent par le Worker, qui lit les octets correspondants sous `/images/` et impose le type `image/webp`; ce détour compense les métadonnées MIME génériques du stockage Sites. Le Worker accepte aussi les deux chemins d’optimisation Vinext (`/_next/image` et `/_vinext/image`) lorsque le binding est disponible.
 
 Les migrations D1 sont livrées sous `drizzle/`; les fichiers sont écrits dans le binding R2 privé `UPLOADS`. Les mutations exigent une origine identique, une clé d’idempotence, un délai antirobot, un jeton Turnstile vérifié côté serveur et passent par des limitations distinctes de création et de transfert. Les images sont transférées une par une, validées par signature binaire et gardées privées. Les PDF sont refusés jusqu’à l’activation d’une analyse antimalware. `npm run test:intake` rejoue le vrai parcours dans workerd avec des bindings D1 et R2 isolés.
 

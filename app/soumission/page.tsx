@@ -79,7 +79,7 @@ export default async function QuotePage({ searchParams }: QuotePageProps) {
           </div>
           <GuidanceFigure
             className="page-hero-figure"
-            src="/images/custom/quote-preparation-v1.webp"
+            src="/media/images/custom/quote-preparation-v1.webp"
             alt="Mise en scène illustrative d’une personne préparant croquis, photos et mesures pour une soumission"
             caption="Personne, documents et projet fictifs; plans et photos restent optionnels."
           />

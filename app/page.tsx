@@ -32,7 +32,7 @@ export default function Home() {
         <figure className="hero-media">
           <div className="hero-photo">
             <Image
-              src="/images/realisation-mes.webp"
+              src="/media/images/realisation-mes.webp"
               alt="Maison contemporaine avec fenêtres, porte et portes de garage noires"
               width={1200}
               height={800}
@@ -143,7 +143,7 @@ export default function Home() {
             </p>
             <GuidanceFigure
               className="process-visual"
-              src="/images/custom/process-measure-v1.webp"
+              src="/media/images/custom/process-measure-v1.webp"
               alt="Mise en scène illustrative d’une prise de mesures avant le remplacement d’une fenêtre"
               caption="Personne et lieu fictifs; cette scène explique une étape du processus."
             />
@@ -187,7 +187,7 @@ export default function Home() {
       <section className="section shell proof-section">
         <div className="proof-image">
           <Image
-            src="/images/realisation-paris-freres.webp"
+            src="/media/images/realisation-paris-freres.webp"
             alt="Projet multirésidentiel avec produits Boulet à Trois-Rivières"
             width={1200}
             height={800}

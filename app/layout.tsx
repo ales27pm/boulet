@@ -61,7 +61,7 @@ const organizationJsonLd = {
   "@id": `${absoluteUrl("/")}#entreprise`,
   name: "Portes et Fenêtres Boulet",
   url: absoluteUrl("/"),
-  logo: absoluteUrl("/images/boulet-wordmark-480.webp"),
+  logo: absoluteUrl("/media/images/boulet-wordmark-480.webp"),
   image: absoluteUrl("/images/custom/og-custom-v1.jpg"),
   telephone: "+1-450-742-9424",
   email: "info@fenetresboulet.com",

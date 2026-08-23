@@ -1,5 +1,5 @@
 const catalogSourcePrefix = "/images/catalog/";
-const catalogDeliveryPrefix = "/images/catalog-delivery/";
+const catalogDeliveryPrefix = "/media/images/catalog-delivery/";
 
 export const catalogImageWidths = [720, 1440] as const;
 

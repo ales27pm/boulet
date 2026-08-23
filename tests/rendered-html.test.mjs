@@ -80,8 +80,11 @@ test("server-renders the redesigned French homepage and supplied identity", asyn
   ]) {
     assert.match(html, new RegExp(`href="/produits/${family}"`));
   }
-  assert.match(html, /src="\/images\/boulet-wordmark-480\.webp"/i);
-  assert.doesNotMatch(html, /_next\/image\?url=%2Fimages%2Fboulet-wordmark/i);
+  assert.match(html, /src="\/media\/images\/boulet-wordmark-480\.webp"/i);
+  assert.doesNotMatch(
+    html,
+    /_next\/image\?url=%2Fmedia%2Fimages%2Fboulet-wordmark/i,
+  );
   assert.match(html, /alt="Boulet"/);
   assert.match(
     html,
@@ -323,7 +326,7 @@ test("packages native persistence, private files and scheduled retention", async
   assert.equal(hostingConfig.d1, "DB");
   assert.equal(hostingConfig.r2, "UPLOADS");
   assert.deepEqual(wranglerConfig.triggers.crons, ["17 5 * * *"]);
-  assert.deepEqual(wranglerConfig.assets.run_worker_first, ["/images/*"]);
+  assert.equal(wranglerConfig.assets.run_worker_first, undefined);
   assert.equal(wranglerConfig.d1_databases[0].binding, "DB");
   assert.equal(wranglerConfig.r2_buckets[0].binding, "UPLOADS");
 
@@ -440,9 +443,9 @@ test("optimizes images through both Vinext-compatible endpoint paths", async () 
   const env = {
     ASSETS: {
       fetch: async (request) => {
-        assert.equal(new URL(request.url).pathname, "/images/source.jpg");
+        assert.equal(new URL(request.url).pathname, "/images/source.webp");
         return new Response("source-image", {
-          headers: { "content-type": "image/jpeg" },
+          headers: { "content-type": "application/octet-stream" },
         });
       },
     },
@@ -477,7 +480,7 @@ test("optimizes images through both Vinext-compatible endpoint paths", async () 
   ]) {
     const response = await worker.fetch(
       new Request(
-        `http://localhost${endpoint}?url=%2Fimages%2Fsource.jpg&w=640&q=75`,
+        `http://localhost${endpoint}?url=%2Fmedia%2Fimages%2Fsource.webp&w=640&q=75`,
         { headers: { accept } },
       ),
       env,
@@ -491,7 +494,7 @@ test("optimizes images through both Vinext-compatible endpoint paths", async () 
 
   const invalidWidthResponse = await worker.fetch(
     new Request(
-      "http://localhost/_next/image?url=%2Fimages%2Fsource.jpg&w=333&q=75",
+      "http://localhost/_next/image?url=%2Fmedia%2Fimages%2Fsource.webp&w=333&q=75",
     ),
     env,
     executionContext,
@@ -512,13 +515,14 @@ test("serves nested WebP assets with an explicit safe MIME type", async () => {
     0x52, 0x49, 0x46, 0x46, 0x04, 0x00, 0x00, 0x00,
     0x57, 0x45, 0x42, 0x50,
   ]);
-  const pathname = "/images/catalog-delivery/fenetres/example.webp";
+  const pathname = "/media/images/catalog-delivery/fenetres/example.webp";
+  const assetPathname = "/images/catalog-delivery/fenetres/example.webp";
   const response = await worker.fetch(
     new Request(`http://localhost${pathname}`),
     {
       ASSETS: {
         fetch: async (request) => {
-          assert.equal(new URL(request.url).pathname, pathname);
+          assert.equal(new URL(request.url).pathname, assetPathname);
           return new Response(webpBytes, {
             headers: { "content-type": "application/octet-stream" },
           });
@@ -534,7 +538,7 @@ test("serves nested WebP assets with an explicit safe MIME type", async () => {
   assert.deepEqual(new Uint8Array(await response.arrayBuffer()), webpBytes);
 
   const missing = await worker.fetch(
-    new Request("http://localhost/images/missing.webp"),
+    new Request("http://localhost/media/images/missing.webp"),
     {
       ASSETS: {
         fetch: async () =>
@@ -550,7 +554,7 @@ test("serves nested WebP assets with an explicit safe MIME type", async () => {
   assert.equal(missing.headers.get("content-type"), "text/plain");
 
   const revalidated = await worker.fetch(
-    new Request("http://localhost/images/cached.webp"),
+    new Request("http://localhost/media/images/cached.webp"),
     {
       ASSETS: {
         fetch: async () =>
@@ -566,23 +570,19 @@ test("serves nested WebP assets with an explicit safe MIME type", async () => {
   assert.equal(revalidated.headers.get("content-type"), "image/webp");
   assert.equal(revalidated.headers.get("etag"), '"cached-webp"');
 
-  const jpegBytes = new Uint8Array([0xff, 0xd8, 0xff, 0xd9]);
-  const jpeg = await worker.fetch(
-    new Request("http://localhost/images/example.jpg"),
+  const methodDenied = await worker.fetch(
+    new Request("http://localhost/media/images/example.webp", {
+      method: "POST",
+    }),
     {
       ASSETS: {
-        fetch: async () =>
-          new Response(jpegBytes, {
-            headers: { "content-type": "image/jpeg" },
-          }),
+        fetch: async () => new Response(webpBytes),
       },
     },
     executionContext,
   );
-  assert.equal(jpeg.status, 200);
-  assert.equal(jpeg.headers.get("content-type"), "image/jpeg");
-  assert.equal(jpeg.headers.get("x-content-type-options"), "nosniff");
-  assert.deepEqual(new Uint8Array(await jpeg.arrayBuffer()), jpegBytes);
+  assert.equal(methodDenied.status, 405);
+  assert.equal(methodDenied.headers.get("allow"), "GET, HEAD");
 });
 
 test("uses the supplied Boulet palette and identity exactly", async () => {

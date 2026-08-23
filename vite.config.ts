@@ -16,10 +16,6 @@ const localBindingConfig = {
   },
   assets: {
     binding: "ASSETS",
-    // Sites currently uploads WebP files with a generic MIME type. Route the
-    // image tree through the Worker so nested assets can receive the correct
-    // type while scripts, styles and fonts retain the free asset-first path.
-    run_worker_first: ["/images/*"],
   },
   images: {
     binding: "IMAGES",

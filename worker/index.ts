@@ -38,8 +38,12 @@ function isWebpAsset(pathname: string): boolean {
   return pathname.toLowerCase().endsWith(".webp");
 }
 
-function isImageAsset(pathname: string): boolean {
-  return pathname.startsWith("/images/");
+function resolveWebpDeliveryPath(pathname: string): string | null {
+  if (!pathname.startsWith("/media/images/") || !isWebpAsset(pathname)) {
+    return null;
+  }
+
+  return pathname.slice("/media".length);
 }
 
 async function fetchTypedAsset(
@@ -91,8 +95,14 @@ const worker = {
     if (isImageOptimizationPath(url.pathname) && assets && images) {
       const allowedWidths = [...DEFAULT_DEVICE_SIZES, ...DEFAULT_IMAGE_SIZES];
       const optimized = await handleImageOptimization(request, {
-        fetchAsset: (path) =>
-          fetchTypedAsset(assets, new Request(new URL(path, request.url))),
+        fetchAsset: (path) => {
+          const assetUrl = new URL(path, request.url);
+          const deliveryPath = resolveWebpDeliveryPath(assetUrl.pathname);
+          if (deliveryPath) {
+            assetUrl.pathname = deliveryPath;
+          }
+          return fetchTypedAsset(assets, new Request(assetUrl));
+        },
         transformImage: async (body, { width, format, quality }) => {
           const result = await images.input(body).transform(width > 0 ? { width } : {}).output({ format, quality });
           return result.response();
@@ -101,11 +111,24 @@ const worker = {
       return withSecurityHeaders(optimized, request);
     }
 
-    if (isImageAsset(url.pathname) && assets) {
-      const response = isWebpAsset(url.pathname)
-        ? await fetchTypedAsset(assets, request)
-        : await assets.fetch(request);
-      return withSecurityHeaders(response, request);
+    const deliveryPath = resolveWebpDeliveryPath(url.pathname);
+    if (deliveryPath && assets) {
+      if (request.method !== "GET" && request.method !== "HEAD") {
+        return withSecurityHeaders(
+          new Response("Method not allowed", {
+            status: 405,
+            headers: { allow: "GET, HEAD" },
+          }),
+          request,
+        );
+      }
+
+      const assetUrl = new URL(request.url);
+      assetUrl.pathname = deliveryPath;
+      return withSecurityHeaders(
+        await fetchTypedAsset(assets, new Request(assetUrl, request)),
+        request,
+      );
     }
 
     return withSecurityHeaders(await handler.fetch(request, env, ctx), request);
