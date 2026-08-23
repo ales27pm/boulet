@@ -38,6 +38,10 @@ function isWebpAsset(pathname: string): boolean {
   return pathname.toLowerCase().endsWith(".webp");
 }
 
+function isImageAsset(pathname: string): boolean {
+  return pathname.startsWith("/images/");
+}
+
 async function fetchTypedAsset(
   assets: AssetFetcher,
   request: Request,
@@ -97,8 +101,11 @@ const worker = {
       return withSecurityHeaders(optimized, request);
     }
 
-    if (isWebpAsset(url.pathname) && assets) {
-      return withSecurityHeaders(await fetchTypedAsset(assets, request), request);
+    if (isImageAsset(url.pathname) && assets) {
+      const response = isWebpAsset(url.pathname)
+        ? await fetchTypedAsset(assets, request)
+        : await assets.fetch(request);
+      return withSecurityHeaders(response, request);
     }
 
     return withSecurityHeaders(await handler.fetch(request, env, ctx), request);

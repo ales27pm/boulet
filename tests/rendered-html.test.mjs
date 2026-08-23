@@ -323,7 +323,7 @@ test("packages native persistence, private files and scheduled retention", async
   assert.equal(hostingConfig.d1, "DB");
   assert.equal(hostingConfig.r2, "UPLOADS");
   assert.deepEqual(wranglerConfig.triggers.crons, ["17 5 * * *"]);
-  assert.deepEqual(wranglerConfig.assets.run_worker_first, ["/*.webp"]);
+  assert.deepEqual(wranglerConfig.assets.run_worker_first, ["/images/*"]);
   assert.equal(wranglerConfig.d1_databases[0].binding, "DB");
   assert.equal(wranglerConfig.r2_buckets[0].binding, "UPLOADS");
 
@@ -565,6 +565,24 @@ test("serves nested WebP assets with an explicit safe MIME type", async () => {
   assert.equal(revalidated.status, 304);
   assert.equal(revalidated.headers.get("content-type"), "image/webp");
   assert.equal(revalidated.headers.get("etag"), '"cached-webp"');
+
+  const jpegBytes = new Uint8Array([0xff, 0xd8, 0xff, 0xd9]);
+  const jpeg = await worker.fetch(
+    new Request("http://localhost/images/example.jpg"),
+    {
+      ASSETS: {
+        fetch: async () =>
+          new Response(jpegBytes, {
+            headers: { "content-type": "image/jpeg" },
+          }),
+      },
+    },
+    executionContext,
+  );
+  assert.equal(jpeg.status, 200);
+  assert.equal(jpeg.headers.get("content-type"), "image/jpeg");
+  assert.equal(jpeg.headers.get("x-content-type-options"), "nosniff");
+  assert.deepEqual(new Uint8Array(await jpeg.arrayBuffer()), jpegBytes);
 });
 
 test("uses the supplied Boulet palette and identity exactly", async () => {
