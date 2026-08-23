@@ -6,11 +6,11 @@ export function Brand() {
     <Link className="brand" href="/">
       <Image
         className="brand-logo"
-        src="/images/boulet-wordmark.jpg"
-        width={1280}
-        height={221}
+        src="/images/boulet-wordmark-480.webp"
+        width={480}
+        height={83}
         alt="Boulet"
-        sizes="(max-width: 560px) 172px, 240px"
+        unoptimized
       />
       <span className="sr-only">Portes &amp; fenêtres — Accueil</span>
     </Link>

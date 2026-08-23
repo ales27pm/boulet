@@ -27,7 +27,7 @@ npm run test:a11y
 npm run check:links
 ```
 
-The project uses Vinext and retains `.openai/hosting.json` for optional Sites deployment. Internal navigation uses `next/link`; content imagery and the responsive Boulet wordmark use `next/image`. The Worker accepts both Vinext-compatible image optimization paths (`/_next/image` and `/_vinext/image`). No database or authentication is required for the public experience, so the unused D1/Drizzle starter scaffolding has been removed.
+The project uses Vinext and retains `.openai/hosting.json` for optional Sites deployment. Internal navigation uses `next/link`; content imagery uses `next/image`. The Boulet wordmark uses a pre-optimized 480 px WebP derivative so its production delivery does not depend on a runtime image binding. The Worker accepts both Vinext-compatible image optimization paths (`/_next/image` and `/_vinext/image`) when that binding is available. No database or authentication is required for the public experience, so the unused D1/Drizzle starter scaffolding has been removed.
 
 `npm run test:a11y` scans all seven customer routes plus the opened mobile menu with axe in Playwright. `npm run check:links` performs a live GET against the centralized external destinations; `LINK_CHECK_SCOPE=first-party` or `third-party` narrows the run. First-party checks run weekly in GitHub Actions, while Instagram and Google Maps remain advisory because bot protections can return transient failures.
 
@@ -37,4 +37,4 @@ Product and named-project photographs are downloaded from the company's current 
 
 `public/og.png` and `public/og-v2.png` are retained earlier social-card iterations. The active `public/images/custom/og-custom-v1.jpg` combines a generated architectural backdrop with the exact supplied wordmark and deterministic typography.
 
-The Boulet wordmark in `public/images/boulet-wordmark.jpg` was supplied by the user and is preserved byte-for-byte. The interface uses the supplied brand tokens `#1a4c9a`, `#ef1115`, and `#e7e8ea`; red is reserved for accents where normal-sized text contrast would otherwise fall below WCAG AA.
+The Boulet wordmark in `public/images/boulet-wordmark.jpg` was supplied by the user and is preserved byte-for-byte. `public/images/boulet-wordmark-480.webp` is its delivery derivative for the interface. The interface uses the supplied brand tokens `#1a4c9a`, `#ef1115`, and `#e7e8ea`; red is reserved for accents where normal-sized text contrast would otherwise fall below WCAG AA.

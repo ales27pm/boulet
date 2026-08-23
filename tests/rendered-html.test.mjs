@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { access, readFile } from "node:fs/promises";
+import { access, readFile, stat } from "node:fs/promises";
 import test from "node:test";
 
 const projectRoot = new URL("../", import.meta.url);
@@ -65,12 +65,8 @@ test("server-renders the redesigned French homepage", async () => {
   assert.match(html, /href="\/soumission"/);
   assert.match(html, /href="\/service"/);
   assert.doesNotMatch(html, /hero-frame-system/);
-  assert.match(
-    html,
-    /src="\/_next\/image\?url=%2Fimages%2Fboulet-wordmark\.jpg/i,
-  );
-  assert.match(html, /sizes="\(max-width: 560px\) 172px, 240px"/);
-  assert.doesNotMatch(html, /src="\/images\/boulet-wordmark\.jpg"/);
+  assert.match(html, /src="\/images\/boulet-wordmark-480\.webp"/i);
+  assert.doesNotMatch(html, /_next\/image\?url=%2Fimages%2Fboulet-wordmark/i);
   assert.match(html, /alt="Boulet"/);
   assert.match(
     html,
@@ -172,6 +168,7 @@ test("removes the starter preview and keeps required project assets", async () =
     "public/og.png",
     "public/images/custom/og-custom-v1.jpg",
     "public/images/boulet-wordmark.jpg",
+    "public/images/boulet-wordmark-480.webp",
     "public/images/realisation-mes.webp",
     "public/images/fenetres-hybrides.webp",
     "public/images/porte-acier.webp",
@@ -323,6 +320,12 @@ test("uses the supplied Boulet identity exactly", async () => {
     createHash("sha256").update(logo).digest("hex"),
     "f431b51b57f42038f633455a2dc35ba02b2e3e3d7cc559359bfbfc97371df630",
   );
+
+  const optimizedLogoStat = await stat(
+    new URL("public/images/boulet-wordmark-480.webp", projectRoot),
+  );
+  assert.ok(optimizedLogoStat.size < 8_000);
+  assert.ok(optimizedLogoStat.size < logo.byteLength);
 
   const socialCard = await readFile(
     new URL("public/images/custom/og-custom-v1.jpg", projectRoot),
