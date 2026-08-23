@@ -548,6 +548,23 @@ test("serves nested WebP assets with an explicit safe MIME type", async () => {
   );
   assert.equal(missing.status, 404);
   assert.equal(missing.headers.get("content-type"), "text/plain");
+
+  const revalidated = await worker.fetch(
+    new Request("http://localhost/images/cached.webp"),
+    {
+      ASSETS: {
+        fetch: async () =>
+          new Response(null, {
+            status: 304,
+            headers: { etag: '"cached-webp"' },
+          }),
+      },
+    },
+    executionContext,
+  );
+  assert.equal(revalidated.status, 304);
+  assert.equal(revalidated.headers.get("content-type"), "image/webp");
+  assert.equal(revalidated.headers.get("etag"), '"cached-webp"');
 });
 
 test("uses the supplied Boulet palette and identity exactly", async () => {

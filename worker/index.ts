@@ -43,7 +43,8 @@ async function fetchTypedAsset(
   request: Request,
 ): Promise<Response> {
   const response = await assets.fetch(request);
-  if (!response.ok || !isWebpAsset(new URL(request.url).pathname)) {
+  const isFreshOrRevalidated = response.ok || response.status === 304;
+  if (!isFreshOrRevalidated || !isWebpAsset(new URL(request.url).pathname)) {
     return response;
   }
 
