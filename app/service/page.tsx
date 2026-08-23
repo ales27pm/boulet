@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { GuidanceFigure } from "../components/GuidanceFigure";
-import { SiteLink as Link } from "../components/SiteLink";
 import { officialLinks } from "../site-data";
 
 export const metadata: Metadata = {

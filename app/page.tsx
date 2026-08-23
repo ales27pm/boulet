@@ -1,6 +1,6 @@
 import Image from "next/image";
+import Link from "next/link";
 import { GuidanceFigure } from "./components/GuidanceFigure";
-import { SiteLink as Link } from "./components/SiteLink";
 import { productFamilies, projects, stats } from "./site-data";
 
 export default function Home() {
@@ -101,7 +101,7 @@ export default function Home() {
         >
           {productFamilies.map((family) => (
             <article className="product-card" key={family.id}>
-              <a href={`/produits#${family.id}`}>
+              <Link href={`/produits#${family.id}`}>
                 <div className="product-image-wrap">
                   <Image
                     src={family.conceptImage}
@@ -124,7 +124,7 @@ export default function Home() {
                     →
                   </span>
                 </div>
-              </a>
+              </Link>
             </article>
           ))}
         </div>

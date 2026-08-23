@@ -5,10 +5,18 @@ import test from "node:test";
 
 const projectRoot = new URL("../", import.meta.url);
 
-async function render(pathname = "/") {
+async function loadWorker(cacheKey) {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
-  workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}-${pathname}`);
+  workerUrl.searchParams.set(
+    "test",
+    `${process.pid}-${Date.now()}-${cacheKey}`,
+  );
   const { default: worker } = await import(workerUrl.href);
+  return worker;
+}
+
+async function render(pathname = "/") {
+  const worker = await loadWorker(pathname);
 
   return worker.fetch(
     new Request(`http://localhost${pathname}`, {
@@ -57,7 +65,12 @@ test("server-renders the redesigned French homepage", async () => {
   assert.match(html, /href="\/soumission"/);
   assert.match(html, /href="\/service"/);
   assert.doesNotMatch(html, /hero-frame-system/);
-  assert.match(html, /src="\/images\/boulet-wordmark\.jpg"/);
+  assert.match(
+    html,
+    /src="\/_next\/image\?url=%2Fimages%2Fboulet-wordmark\.jpg/i,
+  );
+  assert.match(html, /sizes="\(max-width: 560px\) 172px, 240px"/);
+  assert.doesNotMatch(html, /src="\/images\/boulet-wordmark\.jpg"/);
   assert.match(html, /alt="Boulet"/);
   assert.match(
     html,
@@ -175,6 +188,115 @@ test("removes the starter preview and keeps required project assets", async () =
   ]) {
     await access(new URL(asset, projectRoot));
   }
+});
+
+test("uses native Vinext navigation without dormant D1 scaffolding", async () => {
+  const packageJson = await readFile(new URL("package.json", projectRoot), "utf8");
+  const hostingConfig = JSON.parse(
+    await readFile(new URL(".openai/hosting.json", projectRoot), "utf8"),
+  );
+
+  assert.doesNotMatch(packageJson, /drizzle|db:generate/i);
+  assert.equal(hostingConfig.d1, null);
+
+  await assert.rejects(
+    access(new URL("app/components/SiteLink.tsx", projectRoot)),
+  );
+  await assert.rejects(access(new URL("db", projectRoot)));
+  await assert.rejects(access(new URL("drizzle", projectRoot)));
+  await assert.rejects(access(new URL("drizzle.config.ts", projectRoot)));
+
+  for (const sourcePath of [
+    "app/page.tsx",
+    "app/components/Brand.tsx",
+    "app/components/SiteHeader.tsx",
+    "app/components/SiteFooter.tsx",
+    "app/produits/page.tsx",
+  ]) {
+    const source = await readFile(new URL(sourcePath, projectRoot), "utf8");
+    assert.match(source, /from "next\/link"/, sourcePath);
+    assert.doesNotMatch(source, /SiteLink/, sourcePath);
+  }
+});
+
+test("optimizes images through both Vinext-compatible endpoint paths", async () => {
+  const worker = await loadWorker("image-optimization");
+  const transforms = [];
+  const env = {
+    ASSETS: {
+      fetch: async (request) => {
+        assert.equal(new URL(request.url).pathname, "/images/boulet-wordmark.jpg");
+        return new Response("source-image", {
+          headers: { "content-type": "image/jpeg" },
+        });
+      },
+    },
+    IMAGES: {
+      input: () => ({
+        transform: (options) => ({
+          output: async ({ format, quality }) => {
+            transforms.push({ format, quality, ...options });
+            return {
+              response: () =>
+                new Response(`optimized-${options.width}`, {
+                  headers: { "content-type": format },
+                }),
+            };
+          },
+        }),
+      }),
+    },
+  };
+
+  for (const { endpoint, accept, contentType } of [
+    {
+      endpoint: "/_next/image",
+      accept: "image/avif,image/webp",
+      contentType: "image/avif",
+    },
+    {
+      endpoint: "/_vinext/image",
+      accept: "image/webp",
+      contentType: "image/webp",
+    },
+  ]) {
+    const response = await worker.fetch(
+      new Request(
+        `http://localhost${endpoint}?url=%2Fimages%2Fboulet-wordmark.jpg&w=640&q=75`,
+        { headers: { accept } },
+      ),
+      env,
+      {
+        waitUntil() {},
+        passThroughOnException() {},
+      },
+    );
+
+    assert.equal(response.status, 200, endpoint);
+    assert.equal(response.headers.get("content-type"), contentType, endpoint);
+    assert.match(response.headers.get("cache-control") ?? "", /max-age/i);
+    assert.equal(await response.text(), "optimized-640", endpoint);
+  }
+
+  const invalidWidthResponse = await worker.fetch(
+    new Request(
+      "http://localhost/_next/image?url=%2Fimages%2Fboulet-wordmark.jpg&w=333&q=75",
+    ),
+    env,
+    {
+      waitUntil() {},
+      passThroughOnException() {},
+    },
+  );
+  assert.equal(invalidWidthResponse.status, 400);
+
+  assert.deepEqual(
+    transforms.map(({ width, format, quality }) => ({ width, format, quality })),
+    [
+      { width: 640, format: "image/avif", quality: 75 },
+      { width: 640, format: "image/webp", quality: 75 },
+    ],
+  );
 });
 
 test("uses the supplied Boulet identity exactly", async () => {

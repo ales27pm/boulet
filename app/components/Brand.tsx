@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { SiteLink as Link } from "./SiteLink";
+import Link from "next/link";
 
 export function Brand() {
   return (
@@ -10,7 +10,7 @@ export function Brand() {
         width={1280}
         height={221}
         alt="Boulet"
-        unoptimized
+        sizes="(max-width: 560px) 172px, 240px"
       />
       <span className="sr-only">Portes &amp; fenêtres — Accueil</span>
     </Link>

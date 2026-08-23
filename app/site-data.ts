@@ -5,6 +5,7 @@ export const officialLinks = {
   service: `${officialSite}/contact-form/formulaire-de-sav`,
   warranty: `${officialSite}/content/2-garantie`,
   privacy: `${officialSite}/content/19-protection-des-renseignements-personnels-et-mentions-legales`,
+  projects: `${officialSite}/content/15-nos-realisations`,
   showroom: `${officialSite}/magasins`,
   instagram: "https://www.instagram.com/fenetresboulet/",
   maps: "https://www.google.com/maps/place/Portes+et+Fen%C3%AAtres+Boulet/@46.0035516,-73.1694746,17z",

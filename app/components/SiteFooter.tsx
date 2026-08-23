@@ -1,4 +1,4 @@
-import { SiteLink as Link } from "./SiteLink";
+import Link from "next/link";
 import { officialLinks } from "../site-data";
 import { Brand } from "./Brand";
 

@@ -1,4 +1,4 @@
-import { SiteLink as Link } from "./SiteLink";
+import Link from "next/link";
 import { Brand } from "./Brand";
 
 const navigation = [

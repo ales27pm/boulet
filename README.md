@@ -23,9 +23,13 @@ npm install
 npm run dev
 npm run lint
 npm test
+npm run test:a11y
+npm run check:links
 ```
 
-The project uses vinext and retains `.openai/hosting.json` for optional Sites deployment. No database or authentication is required for the public experience.
+The project uses Vinext and retains `.openai/hosting.json` for optional Sites deployment. Internal navigation uses `next/link`; content imagery and the responsive Boulet wordmark use `next/image`. The Worker accepts both Vinext-compatible image optimization paths (`/_next/image` and `/_vinext/image`). No database or authentication is required for the public experience, so the unused D1/Drizzle starter scaffolding has been removed.
+
+`npm run test:a11y` scans all seven customer routes plus the opened mobile menu with axe in Playwright. `npm run check:links` performs a live GET against the centralized external destinations; `LINK_CHECK_SCOPE=first-party` or `third-party` narrows the run. First-party checks run weekly in GitHub Actions, while Instagram and Google Maps remain advisory because bot protections can return transient failures.
 
 ## Asset provenance
 

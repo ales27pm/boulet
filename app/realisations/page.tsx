@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { SiteLink as Link } from "../components/SiteLink";
-import { officialSite, projects } from "../site-data";
+import Link from "next/link";
+import { officialLinks, projects } from "../site-data";
 
 export const metadata: Metadata = {
   title: "Réalisations",
@@ -66,7 +66,7 @@ export default function ProjectsPage() {
             plus généreuse.
           </p>
           <div className="button-row">
-            <a className="text-link" href={`${officialSite}/content/15-nos-realisations`}>
+            <a className="text-link" href={officialLinks.projects}>
               Parcourir la galerie complète <span aria-hidden="true">↗</span>
             </a>
             <Link className="text-link" href="/soumission">
