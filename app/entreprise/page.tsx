@@ -1,13 +1,14 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { createPageMetadata } from "../seo";
 import { officialLinks } from "../site-data";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "Entreprise familiale depuis 1976",
   description:
     "Découvrez l’histoire de Portes et Fenêtres Boulet: une entreprise familiale québécoise de Sorel-Tracy, fabricante depuis 1976.",
-};
+  path: "/entreprise",
+});
 
 const timeline = [
   {
@@ -108,9 +109,9 @@ export default function CompanyPage() {
             * Résumé indicatif. Consultez toutes les conditions et exclusions.
           </p>
           <div className="button-row">
-            <a className="text-link" href={officialLinks.warranty}>
-              Lire la garantie complète <span aria-hidden="true">↗</span>
-            </a>
+            <Link className="text-link" href="/garantie">
+              Comprendre la garantie <span aria-hidden="true">→</span>
+            </Link>
             <Link className="text-link" href="/service">
               Préparer une demande de service <span aria-hidden="true">→</span>
             </Link>

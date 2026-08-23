@@ -1,13 +1,14 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { GuidanceFigure } from "../components/GuidanceFigure";
+import { createPageMetadata } from "../seo";
 import { faqs } from "../site-data";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "Guide d’achat et conseils",
   description:
     "Un guide clair pour choisir le style, le matériau, le vitrage et l’installation de vos portes et fenêtres.",
-};
+  path: "/conseils",
+});
 
 const guideSteps = [
   {

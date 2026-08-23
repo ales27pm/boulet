@@ -4,8 +4,9 @@ import { Brand } from "./Brand";
 const navigation = [
   { href: "/produits", label: "Produits" },
   { href: "/realisations", label: "Réalisations" },
-  { href: "/conseils", label: "Conseils" },
+  { href: "/guides", label: "Conseils & guides" },
   { href: "/entreprise", label: "L’entreprise" },
+  { href: "/contact", label: "Nous joindre" },
 ];
 
 function NavigationLinks({ mobile = false }: { mobile?: boolean }) {
@@ -16,7 +17,12 @@ function NavigationLinks({ mobile = false }: { mobile?: boolean }) {
           {item.label}
         </Link>
       ))}
-      {mobile ? <Link href="/service">Après-vente</Link> : null}
+      {mobile ? (
+        <>
+          <Link href="/faq">Questions fréquentes</Link>
+          <Link href="/service">Après-vente</Link>
+        </>
+      ) : null}
     </>
   );
 }

@@ -6,12 +6,19 @@ import {
   isImageOptimizationPath,
 } from "vinext/server/image-optimization";
 import handler from "vinext/server/app-router-entry";
+import {
+  handleSubmissionRequest,
+  purgeExpiredSubmissions,
+  type SubmissionEnv,
+} from "./submissions";
+import { resolveLegacyRedirect } from "./legacy-redirects";
+import { withSecurityHeaders } from "./security-headers";
 
 interface AssetFetcher {
   fetch(request: Request): Promise<Response>;
 }
 
-interface Env {
+interface Env extends SubmissionEnv {
   ASSETS?: AssetFetcher;
   IMAGES?: {
     input(stream: ReadableStream): {
@@ -38,18 +45,42 @@ const worker = {
     const url = new URL(request.url);
     const { ASSETS: assets, IMAGES: images } = env;
 
+    const legacyDestination = resolveLegacyRedirect(url);
+    if (legacyDestination) {
+      return withSecurityHeaders(
+        new Response(null, {
+          status: 308,
+          headers: { location: legacyDestination.toString() },
+        }),
+        request,
+      );
+    }
+
+    const submissionResponse = await handleSubmissionRequest(request, env);
+    if (submissionResponse) {
+      return withSecurityHeaders(submissionResponse, request);
+    }
+
     if (isImageOptimizationPath(url.pathname) && assets && images) {
       const allowedWidths = [...DEFAULT_DEVICE_SIZES, ...DEFAULT_IMAGE_SIZES];
-      return handleImageOptimization(request, {
+      const optimized = await handleImageOptimization(request, {
         fetchAsset: (path) => assets.fetch(new Request(new URL(path, request.url))),
         transformImage: async (body, { width, format, quality }) => {
           const result = await images.input(body).transform(width > 0 ? { width } : {}).output({ format, quality });
           return result.response();
         },
       }, allowedWidths);
+      return withSecurityHeaders(optimized, request);
     }
 
-    return handler.fetch(request, env, ctx);
+    return withSecurityHeaders(await handler.fetch(request, env, ctx), request);
+  },
+  async scheduled(
+    _controller: unknown,
+    env: Env,
+    ctx: ExecutionContext,
+  ): Promise<void> {
+    ctx.waitUntil(purgeExpiredSubmissions(env));
   },
 };
 

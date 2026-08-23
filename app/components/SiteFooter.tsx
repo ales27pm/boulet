@@ -17,15 +17,30 @@ export function SiteFooter() {
           <p className="footer-heading">Explorer</p>
           <Link href="/produits">Produits</Link>
           <Link href="/realisations">Réalisations</Link>
-          <Link href="/conseils">Guide d’achat</Link>
+          <Link href="/vente-entrepot">Vente d’entrepôt</Link>
+          <Link href="/visite-virtuelle">Visite virtuelle</Link>
+        </div>
+        <div>
+          <p className="footer-heading">Comprendre</p>
+          <Link href="/conseils">Bien choisir</Link>
+          <Link href="/guides">Guides pratiques</Link>
+          <Link href="/faq">Questions fréquentes</Link>
+          <Link href="/subventions">Aide financière</Link>
+          <Link href="/blogue">Blogue</Link>
+        </div>
+        <div>
+          <p className="footer-heading">Boulet</p>
           <Link href="/entreprise">Notre histoire</Link>
+          <Link href="/equipe">Notre équipe</Link>
+          <Link href="/carrieres">Carrières</Link>
+          <Link href="/contact">Nous joindre</Link>
         </div>
         <div>
           <p className="footer-heading">Votre projet</p>
           <Link href="/soumission">Préparer une soumission</Link>
           <Link href="/service">Service après-vente</Link>
-          <a href={officialLinks.warranty}>Garantie détaillée</a>
-          <a href={officialLinks.privacy}>Vie privée et mentions légales</a>
+          <Link href="/garantie">Garantie détaillée</Link>
+          <Link href="/confidentialite">Vie privée</Link>
         </div>
         <div>
           <p className="footer-heading">Nous joindre</p>
@@ -41,7 +56,11 @@ export function SiteFooter() {
       </div>
       <div className="shell footer-bottom">
         <p>© {new Date().getFullYear()} Portes et Fenêtres Boulet</p>
-        <p>Licence RBQ 8246-5071-36</p>
+        <p>
+          Licence RBQ 8246-5071-36 ·{" "}
+          <Link href="/confidentialite">Mentions légales</Link> ·{" "}
+          <Link href="/credits">Crédits</Link>
+        </p>
       </div>
     </footer>
   );

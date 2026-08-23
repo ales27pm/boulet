@@ -1,13 +1,17 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { officialLinks, projects } from "../site-data";
+import {
+  officialGallery,
+  realisationProjects,
+} from "../realisations-data";
+import { createPageMetadata } from "../seo";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "Réalisations",
   description:
     "Découvrez des réalisations Boulet à Trois-Rivières, Varennes et Sorel-Tracy: rénovation, construction neuve et multirésidentiel.",
-};
+  path: "/realisations",
+});
 
 export default function ProjectsPage() {
   return (
@@ -25,31 +29,48 @@ export default function ProjectsPage() {
         </div>
         <div className="page-hero-aside">
           <p>
-            Rénovation sensible, construction contemporaine ou projet
-            multirésidentiel: chaque façade révèle un équilibre différent entre
-            proportions, performance et caractère.
+            Projets nommés et galerie d’archives sont maintenant réunis ici.
+            Chaque image provient de la galerie officielle Boulet; aucune
+            configuration technique n’est déduite de la photographie.
+          </p>
+          <p className="catalog-summary" aria-label="Contenu de la galerie">
+            <strong>{realisationProjects.length}</strong> projets documentés ·{" "}
+            <strong>{officialGallery.length}</strong> vues d’archives
           </p>
         </div>
       </header>
 
       <section className="section page-band">
-        <div className="shell gallery-grid">
-          {projects.map((project) => (
-            <figure className="gallery-card" key={project.title}>
-              <Image
-                src={project.image}
-                alt={project.alt}
-                width={1200}
-                height={800}
-              />
-              <figcaption>
-                <div>
+        <div className="shell section-heading horizontal-heading">
+          <div>
+            <p className="eyebrow">Projets identifiés</p>
+            <h2>Un lieu, une équipe, une façade.</h2>
+          </div>
+          <Link className="text-link" href="/credits">
+            Consulter les crédits de la galerie{" "}
+            <span aria-hidden="true">→</span>
+          </Link>
+        </div>
+        <div className="shell project-catalog-grid">
+          {realisationProjects.map((project, index) => (
+            <article className="project-catalog-card" key={project.slug}>
+              <Link href={`/realisations/${project.slug}`}>
+                <span className="project-catalog-index" aria-hidden="true">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <Image
+                  src={project.image}
+                  alt={project.imageAlt}
+                  width={1200}
+                  height={800}
+                  sizes="(max-width: 760px) 100vw, (max-width: 1180px) 50vw, 33vw"
+                />
+                <span className="project-catalog-copy">
                   <strong>{project.title}</strong>
-                  <span>{project.type}</span>
-                </div>
-                <span>{project.location}</span>
-              </figcaption>
-            </figure>
+                  <span>{project.location}</span>
+                </span>
+              </Link>
+            </article>
           ))}
         </div>
       </section>
@@ -61,18 +82,44 @@ export default function ProjectsPage() {
         </div>
         <div>
           <p className="large-copy">
-            Les lignes noires structurent une façade. Une porte plus vitrée
-            change l’accueil. Une ouverture mieux proportionnée rend la pièce
-            plus généreuse.
+            Les photographies montrent des contextes réels, mais elles ne
+            suffisent pas à identifier le modèle, le vitrage ou la performance
+            d’un produit. Utilisez-les pour préciser une direction, puis faites
+            confirmer chaque choix.
           </p>
           <div className="button-row">
-            <a className="text-link" href={officialLinks.projects}>
-              Parcourir la galerie complète <span aria-hidden="true">↗</span>
-            </a>
             <Link className="text-link" href="/soumission">
               Discuter de ma maison <span aria-hidden="true">→</span>
             </Link>
           </div>
+        </div>
+      </section>
+
+      <section className="section page-band" aria-labelledby="archive-title">
+        <div className="shell section-heading horizontal-heading">
+          <div>
+            <p className="eyebrow">Galerie d’archives</p>
+            <h2 id="archive-title">Toutes les vues publiées.</h2>
+          </div>
+          <p className="section-heading-note">
+            Série officielle capturée le 23 août 2026.
+          </p>
+        </div>
+        <div className="shell archive-gallery">
+          {officialGallery.map((item, index) => (
+            <figure key={item.id}>
+              <Image
+                src={item.image}
+                alt={item.imageAlt}
+                width={840}
+                height={560}
+                sizes="(max-width: 620px) 100vw, (max-width: 1100px) 50vw, 33vw"
+              />
+              <figcaption>
+                Vue {String(index + 1).padStart(2, "0")}
+              </figcaption>
+            </figure>
+          ))}
         </div>
       </section>
 

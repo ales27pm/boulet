@@ -1,13 +1,16 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { GuidanceFigure } from "../components/GuidanceFigure";
-import { officialLinks } from "../site-data";
+import { LeadForm } from "../components/LeadForm";
+import { createPageMetadata } from "../seo";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "Service après-vente",
   description:
-    "Préparez une demande de service après-vente Boulet avec facture, informations produit et photos utiles.",
-};
+    "Documentez un problème avec un produit Boulet et enregistrez une demande de service après-vente.",
+  path: "/service",
+});
+
+export const dynamic = "force-dynamic";
 
 const serviceChecklist = [
   {
@@ -37,6 +40,11 @@ const serviceChecklist = [
 ];
 
 export default function ServicePage() {
+  const turnstileSiteKey =
+    process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY?.trim();
+  const intakeEnabled =
+    process.env.BOULET_INTAKE_ENABLED === "true" && Boolean(turnstileSiteKey);
+
   return (
     <main id="contenu">
       <header className="page-hero shell">
@@ -57,13 +65,10 @@ export default function ServicePage() {
             technicien.
           </p>
           <div className="button-row">
-            <a className="button button-dark" href={officialLinks.service}>
-              Ouvrir le formulaire officiel <span aria-hidden="true">↗</span>
+            <a className="button button-dark" href="#demande">
+              Commencer ma demande <span aria-hidden="true">↓</span>
             </a>
           </div>
-          <p className="external-handoff-note">
-            Vous continuerez sur fenetresboulet.com.
-          </p>
           <GuidanceFigure
             className="page-hero-figure"
             src="/images/custom/service-documentation-v1.webp"
@@ -90,19 +95,27 @@ export default function ServicePage() {
         </ol>
       </section>
 
+      <section className="section shell lead-form-section" id="demande">
+        <LeadForm
+          kind="service"
+          enabled={intakeEnabled}
+          turnstileSiteKey={turnstileSiteKey}
+        />
+      </section>
+
       <section className="section shell">
         <div className="service-grid">
           <article className="service-card accent-card">
-            <span>Demande structurée</span>
+            <span>Besoin d’un autre format?</span>
             <div>
-              <h2>Formulaire après-vente</h2>
+              <h2>Transmettre une facture PDF</h2>
               <p>
-                Idéal pour transmettre les informations produit et les photos
-                nécessaires à l’analyse du dossier.
+                Écrivez à l’équipe si votre facture est en PDF, si vos fichiers
+                sont volumineux ou si le formulaire n’est pas disponible.
               </p>
             </div>
-            <a className="button button-light" href={officialLinks.service}>
-              Ouvrir le formulaire officiel
+            <a className="button button-light" href="mailto:info@fenetresboulet.com">
+              Écrire à l’équipe
             </a>
           </article>
           <article className="service-card">
@@ -118,9 +131,9 @@ export default function ServicePage() {
               <a className="text-link" href="tel:+14507429424">
                 450 742-9424
               </a>
-              <a className="text-link" href={officialLinks.warranty}>
-                Garantie complète <span aria-hidden="true">↗</span>
-              </a>
+              <Link className="text-link" href="/garantie">
+                Garantie complète <span aria-hidden="true">→</span>
+              </Link>
             </div>
           </article>
         </div>

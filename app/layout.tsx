@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { SiteFooter } from "./components/SiteFooter";
 import { SiteHeader } from "./components/SiteHeader";
 import "./globals.css";
+import { absoluteUrl, safeJsonLd, siteUrl } from "./seo";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,13 +16,16 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://fenetresboulet.com"),
+  metadataBase: siteUrl,
   title: {
     default: "Portes et Fenêtres Boulet | Fabriqué au Québec depuis 1976",
     template: "%s | Portes et Fenêtres Boulet",
   },
   description:
     "Portes et fenêtres fabriquées au Québec. Conseils, prise de mesures, fabrication et installation pour un projet mené de A à Z.",
+  alternates: {
+    canonical: "/",
+  },
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
@@ -33,6 +37,7 @@ export const metadata: Metadata = {
     title: "Votre projet de portes et fenêtres, de A à Z.",
     description:
       "Une entreprise familiale québécoise qui prend votre projet en main, de la mesure à l’installation.",
+    url: "/",
     images: [
       {
         url: "/images/custom/og-custom-v1.jpg",
@@ -50,6 +55,32 @@ export const metadata: Metadata = {
   },
 };
 
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": ["LocalBusiness", "HomeAndConstructionBusiness"],
+  "@id": `${absoluteUrl("/")}#entreprise`,
+  name: "Portes et Fenêtres Boulet",
+  url: absoluteUrl("/"),
+  logo: absoluteUrl("/images/boulet-wordmark-480.webp"),
+  image: absoluteUrl("/images/custom/og-custom-v1.jpg"),
+  telephone: "+1-450-742-9424",
+  email: "info@fenetresboulet.com",
+  foundingDate: "1976",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "10700, route Marie-Victorin",
+    addressLocality: "Sorel-Tracy",
+    addressRegion: "QC",
+    postalCode: "J3R 0K2",
+    addressCountry: "CA",
+  },
+  areaServed: {
+    "@type": "AdministrativeArea",
+    name: "Québec",
+  },
+  sameAs: ["https://www.instagram.com/fenetresboulet/"],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -58,6 +89,10 @@ export default function RootLayout({
   return (
     <html lang="fr-CA">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: safeJsonLd(organizationJsonLd) }}
+        />
         <SiteHeader />
         {children}
         <SiteFooter />

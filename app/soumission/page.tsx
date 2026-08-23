@@ -1,13 +1,17 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { GuidanceFigure } from "../components/GuidanceFigure";
-import { officialLinks } from "../site-data";
+import { LeadForm } from "../components/LeadForm";
+import { getCatalogProduct } from "../catalog-data";
+import { createPageMetadata } from "../seo";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "Demander une soumission",
   description:
-    "Préparez votre projet de portes et fenêtres puis accédez au formulaire officiel de soumission Boulet.",
-};
+    "Décrivez votre projet de portes et fenêtres et enregistrez une demande de soumission Boulet.",
+  path: "/soumission",
+});
+
+export const dynamic = "force-dynamic";
 
 const quoteChecklist = [
   {
@@ -27,16 +31,29 @@ const quoteChecklist = [
     copy: "Priorités, inconforts, quantités approximatives et résultat souhaité.",
   },
   {
-    title: "Plans, si disponibles",
-    copy: "Le formulaire accepte un plan PDF. Ce document reste optionnel.",
-  },
-  {
     title: "Photos, si utiles",
     copy: "Quelques vues de la façade ou des ouvertures peuvent accélérer la compréhension.",
   },
+  {
+    title: "Plans, si disponibles",
+    copy: "Les PDF doivent être transmis par courriel tant que leur analyse antimalware n’est pas activée dans ce formulaire.",
+  },
 ];
 
-export default function QuotePage() {
+type QuotePageProps = {
+  searchParams: Promise<{ produit?: string | string[] }>;
+};
+
+export default async function QuotePage({ searchParams }: QuotePageProps) {
+  const turnstileSiteKey =
+    process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY?.trim();
+  const intakeEnabled =
+    process.env.BOULET_INTAKE_ENABLED === "true" && Boolean(turnstileSiteKey);
+  const { produit } = await searchParams;
+  const requestedSlug = Array.isArray(produit) ? produit[0] : produit;
+  const selectedProduct = requestedSlug
+    ? getCatalogProduct(requestedSlug)
+    : undefined;
   return (
     <main id="contenu">
       <header className="page-hero shell">
@@ -56,13 +73,10 @@ export default function QuotePage() {
             mais ils ne sont pas nécessaires pour amorcer un échange.
           </p>
           <div className="button-row">
-            <a className="button button-dark" href={officialLinks.quote}>
-              Ouvrir le formulaire officiel <span aria-hidden="true">↗</span>
+            <a className="button button-dark" href="#demande">
+              Commencer ma demande <span aria-hidden="true">↓</span>
             </a>
           </div>
-          <p className="external-handoff-note">
-            Vous continuerez sur fenetresboulet.com.
-          </p>
           <GuidanceFigure
             className="page-hero-figure"
             src="/images/custom/quote-preparation-v1.webp"
@@ -89,19 +103,31 @@ export default function QuotePage() {
         </ol>
       </section>
 
+      <section className="section shell lead-form-section" id="demande">
+        <LeadForm
+          kind="quote"
+          enabled={intakeEnabled}
+          turnstileSiteKey={turnstileSiteKey}
+          initialProduct={selectedProduct
+            ? { name: selectedProduct.name, family: selectedProduct.family }
+            : undefined}
+        />
+      </section>
+
       <section className="section shell">
         <div className="quote-grid">
           <article className="quote-card accent-card">
-            <span>Projet résidentiel ou commercial</span>
+            <span>Besoin d’un autre format?</span>
             <div>
-              <h2>Envoyer une demande structurée</h2>
+              <h2>Transmettre un PDF ou demander de l’aide</h2>
               <p>
-                Le formulaire officiel transmet vos informations directement à
-                l’équipe Boulet. Vérifiez vos réponses avant l’envoi.
+                Écrivez à l’équipe si vous devez transmettre un plan PDF, si
+                vos fichiers sont volumineux ou si le formulaire n’est pas
+                disponible.
               </p>
             </div>
-            <a className="button button-light" href={officialLinks.quote}>
-              Continuer vers le formulaire
+            <a className="button button-light" href="mailto:info@fenetresboulet.com">
+              Écrire à l’équipe
             </a>
           </article>
           <article className="quote-card">

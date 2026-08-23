@@ -101,7 +101,7 @@ export default function Home() {
         >
           {productFamilies.map((family) => (
             <article className="product-card" key={family.id}>
-              <Link href={`/produits#${family.id}`}>
+              <Link href={`/produits/${family.id}`}>
                 <div className="product-image-wrap">
                   <Image
                     src={family.conceptImage}

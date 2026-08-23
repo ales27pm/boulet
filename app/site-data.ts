@@ -6,7 +6,6 @@ export const officialLinks = {
   warranty: `${officialSite}/content/2-garantie`,
   privacy: `${officialSite}/content/19-protection-des-renseignements-personnels-et-mentions-legales`,
   projects: `${officialSite}/content/15-nos-realisations`,
-  showroom: `${officialSite}/magasins`,
   instagram: "https://www.instagram.com/fenetresboulet/",
   maps: "https://www.google.com/maps/place/Portes+et+Fen%C3%AAtres+Boulet/@46.0035516,-73.1694746,17z",
 };
@@ -16,7 +15,6 @@ export const productFamilies = [
     id: "fenetres",
     index: "01",
     title: "Fenêtres",
-    shortTitle: "Fenêtres",
     description:
       "Battant, auvent, coulissante ou guillotine — en PVC ou hybride, avec vitrage double ou triple selon vos priorités.",
     note: "Confort, lumière, rendement",
@@ -25,13 +23,11 @@ export const productFamilies = [
     conceptImage: "/images/custom/product-windows-concept-v1.webp",
     conceptImageAlt:
       "Maison fictive en brique avec fenêtres à battant noires, image d’inspiration",
-    officialHref: `${officialSite}/13-fenetres`,
   },
   {
     id: "portes-entree",
     index: "02",
     title: "Portes d’entrée",
-    shortTitle: "Portes d’entrée",
     description:
       "Acier, vitrage décoratif et quincaillerie réunis dans une composition cohérente avec l’architecture de la maison.",
     note: "Présence, sécurité, lumière",
@@ -40,13 +36,11 @@ export const productFamilies = [
     conceptImage: "/images/custom/product-entry-concept-v1.webp",
     conceptImageAlt:
       "Entrée fictive en brique avec porte noire et vitrage vertical, image d’inspiration",
-    officialHref: `${officialSite}/14-portes`,
   },
   {
     id: "portes-patio",
     index: "03",
     title: "Portes patio",
-    shortTitle: "Portes patio",
     description:
       "Tout-PVC, aluminium ou hybride pour ouvrir la maison sur l’extérieur sans compromettre la performance.",
     note: "Ouverture, fluidité, performance",
@@ -55,13 +49,11 @@ export const productFamilies = [
     conceptImage: "/images/custom/product-patio-concept-v1.webp",
     conceptImageAlt:
       "Terrasse fictive avec porte patio noire, image d’inspiration",
-    officialHref: `${officialSite}/15-portes-patio`,
   },
   {
     id: "portes-garage",
     index: "04",
     title: "Portes de garage",
-    shortTitle: "Portes de garage",
     description:
       "Des profils sobres ou expressifs, distribués et intégrés au projet pour une façade pensée comme un tout.",
     note: "Façade, isolation, usage",
@@ -70,7 +62,6 @@ export const productFamilies = [
     conceptImage: "/images/custom/product-garage-concept-v1.webp",
     conceptImageAlt:
       "Maison fictive en brique avec portes de garage noires, image d’inspiration",
-    officialHref: `${officialSite}/16-portes-de-garage`,
   },
 ] as const;
 

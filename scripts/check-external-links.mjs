@@ -1,4 +1,6 @@
-import { officialLinks, productFamilies } from "../app/site-data.ts";
+import { catalogFamilies } from "../app/catalog-data.ts";
+import { editorialOfficialLinks } from "../app/editorial-data.ts";
+import { officialLinks } from "../app/site-data.ts";
 
 const timeoutMs = Number.parseInt(
   process.env.LINK_CHECK_TIMEOUT_MS ?? "15000",
@@ -35,9 +37,15 @@ async function checkLink([name, url]) {
 const externalLinks = {
   ...officialLinks,
   ...Object.fromEntries(
-    productFamilies.map((family) => [
-      `product:${family.id}`,
-      family.officialHref,
+    Object.entries(editorialOfficialLinks).map(([name, url]) => [
+      `editorial:${name}`,
+      url,
+    ]),
+  ),
+  ...Object.fromEntries(
+    catalogFamilies.map((family) => [
+      `catalog:${family.id}`,
+      family.sourceUrl,
     ]),
   ),
 };
