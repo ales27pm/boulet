@@ -24,7 +24,7 @@ export const realisationProjects = [
     title: "Rodes Construction",
     location: "Marie-Victorin, Sorel-Tracy",
     image:
-      "/images/realisations-officielles/rodes-marie-victorin.webp",
+      "/images/realisations-officielles/rodes-marie-victorin.jpg",
     imageAlt: "Projet Rodes Construction sur la rue Marie-Victorin à Sorel-Tracy",
     note: "Projet publié dans la galerie officielle Boulet.",
   },
@@ -33,7 +33,7 @@ export const realisationProjects = [
     title: "Rodes Construction",
     location: "Rue Auger, Contrecœur",
     image:
-      "/images/realisations-officielles/rodes-auger-contrecoeur.webp",
+      "/images/realisations-officielles/rodes-auger-contrecoeur.jpg",
     imageAlt: "Projet Rodes Construction sur la rue Auger à Contrecœur",
     note: "Projet publié dans la galerie officielle Boulet.",
   },

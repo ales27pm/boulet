@@ -34,6 +34,28 @@ interface ExecutionContext {
   passThroughOnException(): void;
 }
 
+function isWebpAsset(pathname: string): boolean {
+  return pathname.toLowerCase().endsWith(".webp");
+}
+
+async function fetchTypedAsset(
+  assets: AssetFetcher,
+  request: Request,
+): Promise<Response> {
+  const response = await assets.fetch(request);
+  if (!response.ok || !isWebpAsset(new URL(request.url).pathname)) {
+    return response;
+  }
+
+  const headers = new Headers(response.headers);
+  headers.set("content-type", "image/webp");
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
 // Image security config. SVG sources with .svg extension auto-skip the
 // optimization endpoint on the client side (served directly, no proxy).
 // To route SVGs through the optimizer (with security headers), set
@@ -64,13 +86,18 @@ const worker = {
     if (isImageOptimizationPath(url.pathname) && assets && images) {
       const allowedWidths = [...DEFAULT_DEVICE_SIZES, ...DEFAULT_IMAGE_SIZES];
       const optimized = await handleImageOptimization(request, {
-        fetchAsset: (path) => assets.fetch(new Request(new URL(path, request.url))),
+        fetchAsset: (path) =>
+          fetchTypedAsset(assets, new Request(new URL(path, request.url))),
         transformImage: async (body, { width, format, quality }) => {
           const result = await images.input(body).transform(width > 0 ? { width } : {}).output({ format, quality });
           return result.response();
         },
       }, allowedWidths);
       return withSecurityHeaders(optimized, request);
+    }
+
+    if (isWebpAsset(url.pathname) && assets) {
+      return withSecurityHeaders(await fetchTypedAsset(assets, request), request);
     }
 
     return withSecurityHeaders(await handler.fetch(request, env, ctx), request);

@@ -1,9 +1,22 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { access, readFile, stat } from "node:fs/promises";
+import { access, readFile, readdir, stat } from "node:fs/promises";
 import test from "node:test";
 
 const projectRoot = new URL("../", import.meta.url);
+
+async function listFiles(directory) {
+  const files = [];
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    const child = new URL(`${entry.name}${entry.isDirectory() ? "/" : ""}`, directory);
+    if (entry.isDirectory()) {
+      files.push(...await listFiles(child));
+    } else {
+      files.push(child);
+    }
+  }
+  return files;
+}
 
 async function loadWorker(cacheKey) {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
@@ -310,6 +323,7 @@ test("packages native persistence, private files and scheduled retention", async
   assert.equal(hostingConfig.d1, "DB");
   assert.equal(hostingConfig.r2, "UPLOADS");
   assert.deepEqual(wranglerConfig.triggers.crons, ["17 5 * * *"]);
+  assert.deepEqual(wranglerConfig.assets.run_worker_first, ["/*.webp"]);
   assert.equal(wranglerConfig.d1_databases[0].binding, "DB");
   assert.equal(wranglerConfig.r2_buckets[0].binding, "UPLOADS");
 
@@ -347,6 +361,14 @@ test("packages native persistence, private files and scheduled retention", async
 test("keeps required assets, provenance and deterministic catalogue derivatives", async () => {
   const packageJson = await readFile(new URL("package.json", projectRoot), "utf8");
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
+  const webpFiles = (await listFiles(new URL("public/", projectRoot)))
+    .filter((file) => file.pathname.endsWith(".webp"));
+  assert.ok(webpFiles.length > 800);
+  for (const file of webpFiles) {
+    const bytes = await readFile(file);
+    assert.equal(bytes.subarray(0, 4).toString("ascii"), "RIFF", file.pathname);
+    assert.equal(bytes.subarray(8, 12).toString("ascii"), "WEBP", file.pathname);
+  }
   await assert.rejects(access(new URL("app/_sites-preview", projectRoot)));
   await assert.rejects(
     access(new URL("public/images/custom/ASSET-MANIFEST.md", projectRoot)),
@@ -482,6 +504,50 @@ test("optimizes images through both Vinext-compatible endpoint paths", async () 
       { width: 640, format: "image/webp", quality: 75 },
     ],
   );
+});
+
+test("serves nested WebP assets with an explicit safe MIME type", async () => {
+  const worker = await loadWorker("webp-static-asset");
+  const webpBytes = new Uint8Array([
+    0x52, 0x49, 0x46, 0x46, 0x04, 0x00, 0x00, 0x00,
+    0x57, 0x45, 0x42, 0x50,
+  ]);
+  const pathname = "/images/catalog-delivery/fenetres/example.webp";
+  const response = await worker.fetch(
+    new Request(`http://localhost${pathname}`),
+    {
+      ASSETS: {
+        fetch: async (request) => {
+          assert.equal(new URL(request.url).pathname, pathname);
+          return new Response(webpBytes, {
+            headers: { "content-type": "application/octet-stream" },
+          });
+        },
+      },
+    },
+    executionContext,
+  );
+
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get("content-type"), "image/webp");
+  assert.equal(response.headers.get("x-content-type-options"), "nosniff");
+  assert.deepEqual(new Uint8Array(await response.arrayBuffer()), webpBytes);
+
+  const missing = await worker.fetch(
+    new Request("http://localhost/images/missing.webp"),
+    {
+      ASSETS: {
+        fetch: async () =>
+          new Response("missing", {
+            status: 404,
+            headers: { "content-type": "text/plain" },
+          }),
+      },
+    },
+    executionContext,
+  );
+  assert.equal(missing.status, 404);
+  assert.equal(missing.headers.get("content-type"), "text/plain");
 });
 
 test("uses the supplied Boulet palette and identity exactly", async () => {

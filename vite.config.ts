@@ -16,6 +16,10 @@ const localBindingConfig = {
   },
   assets: {
     binding: "ASSETS",
+    // Sites currently uploads WebP files with a generic MIME type. Route only
+    // those assets through the Worker so it can attach image/webp while other
+    // static files retain the free asset-first path.
+    run_worker_first: ["/*.webp"],
   },
   images: {
     binding: "IMAGES",
