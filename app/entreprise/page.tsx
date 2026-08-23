@@ -79,10 +79,11 @@ export default function CompanyPage() {
       <section className="section shell proof-section" id="garantie">
         <div className="proof-image">
           <Image
-            src="/media/images/realisation-capricor.webp"
+            src="/media/images/editorial/realisation-capricor-v2.webp"
             alt="Rénovation d’une maison avec fenêtres Boulet à Trois-Rivières"
             width={1200}
             height={800}
+            sizes="(max-width: 760px) 100vw, (max-width: 1180px) 54vw, 620px"
           />
           <p>Capricor · Trois-Rivières</p>
         </div>

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { GuidanceFigure } from "./components/GuidanceFigure";
+import { MediaFrame } from "./components/MediaFrame";
 import { productFamilies, projects, stats } from "./site-data";
 
 export default function Home() {
@@ -32,10 +33,11 @@ export default function Home() {
         <figure className="hero-media">
           <div className="hero-photo">
             <Image
-              src="/media/images/realisation-mes.webp"
+              src="/media/images/editorial/realisation-mes-v2.webp"
               alt="Maison contemporaine avec fenêtres, porte et portes de garage noires"
               width={1200}
               height={800}
+              sizes="(max-width: 760px) 100vw, (max-width: 1180px) 58vw, 720px"
               priority
             />
           </div>
@@ -108,6 +110,7 @@ export default function Home() {
                     alt={family.conceptImageAlt}
                     width={1122}
                     height={1402}
+                    sizes="(max-width: 760px) 100vw, (max-width: 1180px) 50vw, 25vw"
                   />
                   <span className="product-index">{family.index}</span>
                   <span
@@ -187,10 +190,11 @@ export default function Home() {
       <section className="section shell proof-section">
         <div className="proof-image">
           <Image
-            src="/media/images/realisation-paris-freres.webp"
+            src="/media/images/editorial/realisation-paris-freres-v2.webp"
             alt="Projet multirésidentiel avec produits Boulet à Trois-Rivières"
             width={1200}
             height={800}
+            sizes="(max-width: 760px) 100vw, (max-width: 1180px) 54vw, 620px"
           />
           <p>Les Habitations Paris &amp; Frères · Trois-Rivières</p>
         </div>
@@ -238,19 +242,23 @@ export default function Home() {
         </div>
         <div className="shell project-strip">
           {projects.map((project, index) => (
-            <figure className={index === 1 ? "project-featured" : ""} key={project.title}>
-              <Image
-                src={project.image}
-                alt={project.alt}
-                width={1200}
-                height={800}
-              />
-              <figcaption>
-                <span>{project.type}</span>
-                <strong>{project.title}</strong>
-                <small>{project.location}</small>
-              </figcaption>
-            </figure>
+            <MediaFrame
+              alt={project.alt}
+              caption={
+                <>
+                  <span>{project.type}</span>
+                  <strong>{project.title}</strong>
+                  <small>{project.location}</small>
+                </>
+              }
+              className={index === 1 ? "project-featured" : ""}
+              height={800}
+              key={project.title}
+              mediaRole="project"
+              sizes="(max-width: 760px) 100vw, (max-width: 1180px) 50vw, 33vw"
+              src={project.image}
+              width={1200}
+            />
           ))}
         </div>
       </section>

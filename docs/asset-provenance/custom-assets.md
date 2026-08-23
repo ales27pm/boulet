@@ -1,8 +1,8 @@
 # Fenêtres Boulet custom asset provenance
 
-Generated on 2026-08-21 with the built-in OpenAI Imagegen tool in one-call-per-asset mode. The original PNGs remain in the Codex generated-images directory; the website uses optimized, versioned derivatives. All nine scenes are illustrative. They are not documented Boulet products, employees, customers, facilities, archives, or completed projects.
+The initial suite was generated on 2026-08-21 with the built-in OpenAI Imagegen tool in one-call-per-asset mode. Eight editorial scenes remain active after the approved 2026-08-23 cohesion pass. The initial social card was retired and replaced by a separately generated v2 backdrop. The original PNGs remain in the Codex generated-images directory; the website uses optimized, versioned derivatives. Every generated scene is illustrative. None documents a Boulet product, employee, customer, facility, archive or completed project.
 
-The official wordmark at `public/images/boulet-wordmark.jpg` was not generated or edited. It was composited deterministically onto the social card by `scripts/build-custom-assets.mjs`.
+The official wordmark at `public/images/boulet-wordmark.jpg` was supplied by the user, not generated, and remains preserved byte-for-byte. `scripts/build-brand-assets.mjs` extracts the transparent color and reversed variants deterministically without redrawing the identity. The active color variant is composited onto the social card by `scripts/build-cohesion-assets.mjs`.
 
 ## Output inventory and disclosure policy
 
@@ -16,7 +16,8 @@ The official wordmark at `public/images/boulet-wordmark.jpg` was not generated o
 | `guide-materials-v1.webp` | `exec-acf4107e-7aeb-4638-9328-e3e6b2c6a25d.png` | Buying guidance | Advice page | Mise en situation; samples are fictional; materials, glazing, and finishes must be confirmed. |
 | `service-documentation-v1.webp` | `exec-dd86bdd9-2f7d-4dfe-82d5-5acc0ef74d2d.png` | Service guidance | After-sales preparation | Mise en situation; person, place, and file are fictional; no real customer data. |
 | `quote-preparation-v1.webp` | `exec-96125cb8-52c2-4bf2-b2a8-bac266071d31.png` | Quote guidance | Quote preparation | Mise en situation; person, documents, and project are fictional. |
-| `og-custom-v1.jpg` | `exec-abc73745-13fa-47c5-b072-bcf27ae409aa.png` | Social-card concept | Open Graph and Twitter sharing | Image d’inspiration; no client project is represented. |
+| `og-custom-v1.jpg` — retired and removed | `exec-abc73745-13fa-47c5-b072-bcf27ae409aa.png` | Historical social-card concept | None; retained only as a provenance record | Image d’inspiration; no client project was represented. |
+| `social-card-v2.jpg` | `exec-4214e338-e18f-4f60-b695-069fee8e9c48.png` | Active social-card backdrop | Open Graph, Twitter and organization metadata | Image d’inspiration; the Quebec home is fictional, no people appear and no client realization is represented. |
 
 ## Executed prompts
 
@@ -156,7 +157,7 @@ Constraints: no readable text, no logos, no watermark, no recognizable face, no 
 Avoid: sales meeting, handshake, smiling stock-photo family, financial paperwork, luxury home, extra fingers, illegible AI text, HDR, teal-orange grade, glossy CGI
 ```
 
-### Social card — architectural backdrop
+### Retired social card v1 — architectural backdrop
 
 ```text
 Use case: photorealistic-natural
@@ -173,6 +174,24 @@ Constraints: absolutely no text, no letters, no logos, no watermark, no people, 
 Avoid: luxury mansion, hero family, CGI perfection, floating window grids, fake signage, impossible geometry, glowing glass, teal-orange grade, clutter in the left negative-space area
 ```
 
-## Production transform
+### Social card v2 — cohesive architectural backdrop
 
-`scripts/build-custom-assets.mjs` converts the eight editorial PNG masters to WebP at quality 84. It creates the 1200×630 JPEG social card by cropping the generated architectural backdrop, adding the supplied Boulet wordmark unchanged, and rendering the headline and supporting copy as deterministic SVG text. The original generated PNGs are never overwritten.
+Generated on 2026-08-23. The internal Imagegen source is `/home/ales27pm/.codex/generated_images/01a021c8-f02b-76a1-9aac-35a4c604e46d/exec-4214e338-e18f-4f60-b695-069fee8e9c48.png`.
+
+```text
+Create a photorealistic editorial architectural image for the social sharing card of a Quebec doors and windows manufacturer. Wide 1.91:1 composition intended for 1200x630. A contemporary but believable detached Quebec home in late winter or very early spring, viewed from a natural eye-level three-quarter angle. Crisp black-framed windows, charcoal entry door, restrained warm brick, local stone and natural wood, soft diffuse overcast daylight around neutral 5200K, realistic snow remnants and damp ground, natural interior warmth visible through a few windows. Keep the left 42 percent calmer with generous architectural negative space for a later brand lockup, while the main house mass sits toward the right. Very restrained accents inspired by #1a4c9a blue and #ef1115 red, appearing only as tiny plausible objects. Natural documentary/editorial photography, straight verticals, moderate contrast, contained saturation, subtle grain, consistent sharpness. No people, no vehicles, no text, no letters, no logos, no signs, no watermark, no HDR, no glossy CGI, no surreal geometry, no luxury mansion cliché.
+```
+
+## Production transforms
+
+### Historical v1 delivery
+
+The retired `scripts/build-custom-assets.mjs` converted the eight editorial PNG masters to WebP at quality 84 and created the old social card. That script and `og-custom-v1.jpg` have been removed so they cannot overwrite or be mistaken for the active visual direction. This section remains only as the audit trail for the initial outputs and prompts.
+
+### Cohesion pass — 2026-08-23
+
+The eight active v1 WebP scenes were rebuilt in place from their preserved Imagegen masters. Each source received Adobe levels, automatic tone and the exact `OpenAI Editorial Neutral` preset. Their native dimensions and aspect ratios were preserved, then the approved outputs were encoded as WebP quality 84. This changes the shared grade, not the depicted scene or its factual status.
+
+The v2 social backdrop received Adobe automatic tone and the same `OpenAI Editorial Neutral` preset, then was resized to 1200×630. A deterministic Sharp composition adds the official transparent wordmark, brand panel and typography. The visible disclosure reads `IMAGE D’INSPIRATION · AUCUNE RÉALISATION CLIENT`. The resulting `social-card-v2.jpg` is the only social card referenced by the runtime.
+
+`scripts/build-cohesion-assets.mjs` is the active delivery pipeline. Its twelve approved masters are preserved under `source-assets/visual-cohesion/`: three official-project derivatives, the eight preserved marketing scenes and the v2 social backdrop. It encodes project derivatives as WebP quality 86, marketing scenes as WebP quality 84 and the final social card as a 1200×630 progressive JPEG. `--check` reconstructs every output in memory and verifies it byte for byte. The pipeline never modifies the official project photographs or Imagegen masters in place.

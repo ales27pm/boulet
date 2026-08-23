@@ -1,9 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
-import {
-  officialGallery,
-  realisationProjects,
-} from "../realisations-data";
+import { MediaFrame } from "../components/MediaFrame";
+import { officialGallery, realisationProjects } from "../realisations-data";
 import { createPageMetadata } from "../seo";
 
 export const metadata = createPageMetadata({
@@ -58,12 +55,13 @@ export default function ProjectsPage() {
                 <span className="project-catalog-index" aria-hidden="true">
                   {String(index + 1).padStart(2, "0")}
                 </span>
-                <Image
-                  src={project.image}
+                <MediaFrame
                   alt={project.imageAlt}
-                  width={1200}
                   height={800}
+                  mediaRole="project"
                   sizes="(max-width: 760px) 100vw, (max-width: 1180px) 50vw, 33vw"
+                  src={project.image}
+                  width={1200}
                 />
                 <span className="project-catalog-copy">
                   <strong>{project.title}</strong>
@@ -107,18 +105,16 @@ export default function ProjectsPage() {
         </div>
         <div className="shell archive-gallery">
           {officialGallery.map((item, index) => (
-            <figure key={item.id}>
-              <Image
-                src={item.image}
-                alt={item.imageAlt}
-                width={840}
-                height={560}
-                sizes="(max-width: 620px) 100vw, (max-width: 1100px) 50vw, 33vw"
-              />
-              <figcaption>
-                Vue {String(index + 1).padStart(2, "0")}
-              </figcaption>
-            </figure>
+            <MediaFrame
+              alt={item.imageAlt}
+              caption={`Vue ${String(index + 1).padStart(2, "0")}`}
+              height={560}
+              key={item.id}
+              mediaRole="project"
+              sizes="(max-width: 620px) 100vw, (max-width: 1100px) 50vw, 33vw"
+              src={item.image}
+              width={840}
+            />
           ))}
         </div>
       </section>

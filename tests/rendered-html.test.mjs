@@ -1,9 +1,15 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { access, readFile, readdir, stat } from "node:fs/promises";
+import { access, readFile, readdir } from "node:fs/promises";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
+import sharp from "sharp";
 
 const projectRoot = new URL("../", import.meta.url);
+
+function projectImage(path) {
+  return sharp(fileURLToPath(new URL(path, projectRoot)));
+}
 
 async function listFiles(directory) {
   const files = [];
@@ -67,6 +73,15 @@ test("server-renders the redesigned French homepage and supplied identity", asyn
   assert.match(html, /Manufacturier québécois depuis 1976/);
   assert.match(html, /Votre projet, de A à Z/);
   assert.match(html, /Voici comment le projet avance/);
+  assert.match(
+    html,
+    /class="media-frame media-frame--guidance guidance-figure process-visual"/,
+  );
+  assert.equal(
+    (html.match(/class="media-frame media-frame--project(?: |")/g) ?? [])
+      .length,
+    3,
+  );
   assert.match(html, /Une entreprise familiale à Sorel-Tracy depuis 1976/);
   assert.match(html, /Images d’inspiration/);
   assert.ok((html.match(/Image d’inspiration/g) ?? []).length >= 4);
@@ -80,16 +95,33 @@ test("server-renders the redesigned French homepage and supplied identity", asyn
   ]) {
     assert.match(html, new RegExp(`href="/produits/${family}"`));
   }
-  assert.match(html, /src="\/media\/images\/boulet-wordmark-480\.webp"/i);
-  assert.doesNotMatch(
-    html,
-    /_next\/image\?url=%2Fmedia%2Fimages%2Fboulet-wordmark/i,
-  );
+  const headerMarkup = html.match(
+    /<header class="site-header"[\s\S]*?<\/header>/i,
+  )?.[0];
+  const footerMarkup = html.match(
+    /<footer class="site-footer"[\s\S]*?<\/footer>/i,
+  )?.[0];
+  assert.ok(headerMarkup, "homepage header markup");
+  assert.ok(footerMarkup, "homepage footer markup");
+  assert.match(headerMarkup, /class="brand brand-color"/i);
+  assert.match(headerMarkup, /boulet-wordmark-color\.png/i);
+  assert.doesNotMatch(headerMarkup, /boulet-wordmark-reversed\.png/i);
+  assert.match(footerMarkup, /class="brand brand-reversed"/i);
+  assert.match(footerMarkup, /boulet-wordmark-reversed\.png/i);
+  assert.doesNotMatch(footerMarkup, /boulet-wordmark-color\.png/i);
   assert.match(html, /alt="Boulet"/);
+  for (const editorialAsset of [
+    "realisation-mes-v2.webp",
+    "realisation-paris-freres-v2.webp",
+    "realisation-capricor-v2.webp",
+  ]) {
+    assert.match(html, new RegExp(editorialAsset.replace(".", "\\."), "i"));
+  }
   assert.match(
     html,
-    /property="og:image" content="https:\/\/fenetresboulet\.com\/images\/custom\/og-custom-v1\.jpg"/i,
+    /property="og:image" content="https:\/\/fenetresboulet\.com\/images\/custom\/social-card-v2\.jpg"/i,
   );
+  assert.doesNotMatch(html, /boulet-wordmark-480\.webp|og-custom-v1\.jpg/i);
   assert.match(
     html,
     /<meta name="description" content="Portes et fenêtres fabriquées au Québec\./i,
@@ -168,6 +200,11 @@ test("server-renders every public editorial route", async () => {
     assert.match(html, marker, pathname);
     assert.match(html, /<main id="contenu">/, pathname);
     assert.match(html, /rel="canonical"/, pathname);
+    assert.match(
+      html,
+      /property="og:image" content="https:\/\/fenetresboulet\.com\/images\/custom\/social-card-v2\.jpg"/i,
+      pathname,
+    );
     assert.doesNotMatch(
       html,
       /\bIA\b|\bAI\b|visualisation|image générée/i,
@@ -227,7 +264,10 @@ test("renders the complete official project gallery with native detail pages", a
   const detailHtml = await detail.text();
   assert.match(detailHtml, /Projet publié par Boulet/);
   assert.match(detailHtml, /Une référence visuelle, pas une fiche technique/);
-  assert.match(detailHtml, /images\/realisations-officielles\/capricor\.jpg/);
+  assert.match(
+    detailHtml,
+    /media\/images\/editorial\/realisation-capricor-v2\.webp/,
+  );
   assert.doesNotMatch(detailHtml, /modèle [A-Z][A-Za-z0-9-]+ installé/i);
 });
 
@@ -379,11 +419,14 @@ test("keeps required assets, provenance and deterministic catalogue derivatives"
   await access(new URL("docs/asset-provenance/custom-assets.md", projectRoot));
 
   for (const asset of [
-    "public/favicon.ico",
-    "public/og.png",
-    "public/images/custom/og-custom-v1.jpg",
+    "public/images/brand/boulet-symbol.png",
+    "public/images/brand/boulet-wordmark-color.png",
+    "public/images/brand/boulet-wordmark-reversed.png",
+    "public/images/custom/social-card-v2.jpg",
+    "public/images/editorial/realisation-mes-v2.webp",
+    "public/images/editorial/realisation-paris-freres-v2.webp",
+    "public/images/editorial/realisation-capricor-v2.webp",
     "public/images/boulet-wordmark.jpg",
-    "public/images/boulet-wordmark-480.webp",
     "public/images/custom/product-windows-concept-v1.webp",
     "public/images/custom/process-measure-v1.webp",
     "public/documents/conseils-entretien-boulet.pdf",
@@ -398,6 +441,61 @@ test("keeps required assets, provenance and deterministic catalogue derivatives"
   ]) {
     await access(new URL(asset, projectRoot));
   }
+
+  const appSources = await Promise.all(
+    (await listFiles(new URL("app/", projectRoot)))
+      .filter((file) => /\.(?:css|ts|tsx)$/.test(file.pathname))
+      .map((file) => readFile(file, "utf8")),
+  );
+  const runtimeSource = appSources.join("\n");
+  for (const retiredReference of [
+    "/media/images/boulet-wordmark-480.webp",
+    "/images/custom/og-custom-v1.jpg",
+    "/og.png",
+    "/og-v2.png",
+    "/media/images/atelier-collage.webp",
+    "/images/battant-hybride.jpg",
+    "/images/battant-pvc.jpg",
+    "/media/images/boulet-logo.webp",
+    "/media/images/fenetres-hybrides.webp",
+    "/images/patio-pvc.jpg",
+    "/media/images/porte-acier.webp",
+    "/media/images/porte-patio.webp",
+    "/media/images/porte-garage.webp",
+    "/media/images/realisation-mes.webp",
+    "/media/images/realisation-paris-freres.webp",
+    "/media/images/realisation-capricor.webp",
+  ]) {
+    assert.doesNotMatch(
+      runtimeSource,
+      new RegExp(retiredReference),
+      retiredReference,
+    );
+  }
+  for (const retiredAsset of [
+    "public/og.png",
+    "public/og-v2.png",
+    "public/images/atelier-collage.webp",
+    "public/images/battant-hybride.jpg",
+    "public/images/battant-pvc.jpg",
+    "public/images/boulet-logo.webp",
+    "public/images/boulet-wordmark-480.webp",
+    "public/images/custom/og-custom-v1.jpg",
+    "public/images/fenetres-hybrides.webp",
+    "public/images/patio-pvc.jpg",
+    "public/images/porte-acier.webp",
+    "public/images/porte-garage.webp",
+    "public/images/porte-patio.webp",
+    "public/images/realisation-mes.webp",
+    "public/images/realisation-paris-freres.webp",
+    "public/images/realisation-capricor.webp",
+  ]) {
+    await assert.rejects(access(new URL(retiredAsset, projectRoot)));
+  }
+  await assert.rejects(
+    access(new URL("scripts/build-custom-assets.mjs", projectRoot)),
+  );
+  await access(new URL("scripts/build-cohesion-assets.mjs", projectRoot));
 
   const documentHashes = {
     "public/documents/garantie-limitee-boulet.pdf":
@@ -599,17 +697,80 @@ test("uses the supplied Boulet palette and identity exactly", async () => {
     "f431b51b57f42038f633455a2dc35ba02b2e3e3d7cc559359bfbfc97371df630",
   );
 
-  const optimizedLogoStat = await stat(
-    new URL("public/images/boulet-wordmark-480.webp", projectRoot),
-  );
-  assert.ok(optimizedLogoStat.size < 8_000);
-  assert.ok(optimizedLogoStat.size < logo.byteLength);
+  const logoAssets = [
+    {
+      path: "public/images/brand/boulet-wordmark-color.png",
+      requiredColors: [[26, 76, 154], [239, 17, 21]],
+    },
+    {
+      path: "public/images/brand/boulet-wordmark-reversed.png",
+      requiredColors: [[255, 255, 255], [239, 17, 21]],
+    },
+  ];
 
-  const socialCard = await readFile(
-    new URL("public/images/custom/og-custom-v1.jpg", projectRoot),
+  for (const { path, requiredColors } of logoAssets) {
+    const image = projectImage(path);
+    const metadata = await image.metadata();
+    assert.equal(metadata.format, "png", path);
+    assert.equal(metadata.width, 960, path);
+    assert.equal(metadata.height, 167, path);
+    assert.equal(metadata.hasAlpha, true, path);
+    assert.equal(metadata.channels, 4, path);
+
+    const { data, info } = await image.ensureAlpha().raw().toBuffer({
+      resolveWithObject: true,
+    });
+    const alphaAt = (x, y) => data[(y * info.width + x) * info.channels + 3];
+    for (const [x, y] of [
+      [0, 0],
+      [info.width - 1, 0],
+      [0, info.height - 1],
+      [info.width - 1, info.height - 1],
+    ]) {
+      assert.equal(alphaAt(x, y), 0, `${path} transparent corner ${x},${y}`);
+    }
+
+    for (const expected of requiredColors) {
+      let found = false;
+      for (let offset = 0; offset < data.length; offset += info.channels) {
+        if (
+          data[offset + 3] >= 245 &&
+          Math.abs(data[offset] - expected[0]) <= 8 &&
+          Math.abs(data[offset + 1] - expected[1]) <= 8 &&
+          Math.abs(data[offset + 2] - expected[2]) <= 8
+        ) {
+          found = true;
+          break;
+        }
+      }
+      assert.ok(found, `${path} contains ${expected.join(",")}`);
+    }
+  }
+
+  const symbol = await projectImage(
+    "public/images/brand/boulet-symbol.png",
+  ).metadata();
+  assert.equal(symbol.format, "png");
+  assert.equal(symbol.width, 512);
+  assert.equal(symbol.height, 512);
+  assert.equal(symbol.hasAlpha, true);
+
+  const socialCard = await projectImage(
+    "public/images/custom/social-card-v2.jpg",
+  ).metadata();
+  assert.deepEqual(
+    [socialCard.width, socialCard.height, socialCard.format],
+    [1200, 630, "jpeg"],
   );
-  assert.equal(
-    createHash("sha256").update(socialCard).digest("hex"),
-    "33f1118a14626908826750416ae95b95ac20219949699b778c7ac8708fcb75d8",
-  );
+
+  for (const path of [
+    "public/images/editorial/realisation-mes-v2.webp",
+    "public/images/editorial/realisation-paris-freres-v2.webp",
+    "public/images/editorial/realisation-capricor-v2.webp",
+  ]) {
+    const metadata = await projectImage(path).metadata();
+    assert.equal(metadata.format, "webp", path);
+    assert.ok((metadata.width ?? 0) >= 1_000, `${path} usable width`);
+    assert.ok((metadata.height ?? 0) >= 400, `${path} usable height`);
+  }
 });

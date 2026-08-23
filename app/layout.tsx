@@ -27,8 +27,15 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
+    icon: [
+      {
+        url: "/images/brand/boulet-symbol.png",
+        type: "image/png",
+        sizes: "512x512",
+      },
+    ],
+    shortcut: "/images/brand/boulet-symbol.png",
+    apple: "/images/brand/boulet-symbol.png",
   },
   openGraph: {
     type: "website",
@@ -40,10 +47,10 @@ export const metadata: Metadata = {
     url: "/",
     images: [
       {
-        url: "/images/custom/og-custom-v1.jpg",
+        url: "/images/custom/social-card-v2.jpg",
         width: 1200,
         height: 630,
-        alt: "Image d’inspiration montrant une maison fictive aux fenêtres noires; aucune réalisation client n’est représentée.",
+        alt: "Visuel d’inspiration Boulet montrant une façade résidentielle aux ouvertures noires.",
       },
     ],
   },
@@ -51,7 +58,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Votre projet de portes et fenêtres, de A à Z.",
     description: "Portes et fenêtres fabriquées au Québec depuis 1976.",
-    images: ["/images/custom/og-custom-v1.jpg"],
+    images: ["/images/custom/social-card-v2.jpg"],
   },
 };
 
@@ -61,8 +68,8 @@ const organizationJsonLd = {
   "@id": `${absoluteUrl("/")}#entreprise`,
   name: "Portes et Fenêtres Boulet",
   url: absoluteUrl("/"),
-  logo: absoluteUrl("/media/images/boulet-wordmark-480.webp"),
-  image: absoluteUrl("/images/custom/og-custom-v1.jpg"),
+  logo: absoluteUrl("/images/brand/boulet-wordmark-color.png"),
+  image: absoluteUrl("/images/custom/social-card-v2.jpg"),
   telephone: "+1-450-742-9424",
   email: "info@fenetresboulet.com",
   foundingDate: "1976",

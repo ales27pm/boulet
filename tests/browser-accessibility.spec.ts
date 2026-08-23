@@ -1,5 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 
 const customerRoutes = [
   "/",
@@ -38,6 +38,32 @@ function formatViolations(
           .join("\n"),
     )
     .join("\n");
+}
+
+async function expectDecodedImages(page: Page, selector: string) {
+  const images = page.locator(selector);
+  const count = await images.count();
+  expect(count, `${selector} image count`).toBeGreaterThan(0);
+
+  for (let index = 0; index < count; index += 1) {
+    const image = images.nth(index);
+    await image.scrollIntoViewIfNeeded();
+    await expect
+      .poll(
+        () =>
+          image.evaluate(
+            (element) =>
+              (element as HTMLImageElement).complete &&
+              (element as HTMLImageElement).naturalWidth > 0 &&
+              (element as HTMLImageElement).naturalHeight > 0,
+          ),
+        {
+          message: `${selector} image ${index + 1} decodes`,
+          timeout: 15_000,
+        },
+      )
+      .toBe(true);
+  }
 }
 
 for (const route of customerRoutes) {
@@ -114,7 +140,7 @@ test("WebP delivery preserves MIME, bytes and revalidation", async ({
   request,
 }) => {
   const paths = [
-    "/media/images/boulet-wordmark-480.webp",
+    "/media/images/editorial/realisation-mes-v2.webp",
     "/media/images/catalog-delivery/fenetres/57-battant-echo-pvc/421-battant-echo-pvc-1440w.webp",
   ];
 
@@ -151,6 +177,103 @@ test("WebP delivery preserves MIME, bytes and revalidation", async ({
     ),
   ).toBe(true);
 });
+
+test("brand variants and the active social card decode from their public paths", async ({
+  page,
+  request,
+}) => {
+  await page.goto("/", { waitUntil: "networkidle" });
+
+  const headerBrand = page.locator(".site-header .brand-color");
+  const footerBrand = page.locator(".site-footer .brand-reversed");
+  await expect(headerBrand).toHaveCount(1);
+  await expect(footerBrand).toHaveCount(1);
+  await expect(headerBrand.locator("img")).toHaveAttribute(
+    "src",
+    /boulet-wordmark-color\.png/,
+  );
+  await expect(footerBrand.locator("img")).toHaveAttribute(
+    "src",
+    /boulet-wordmark-reversed\.png/,
+  );
+  expect(
+    await headerBrand.evaluate((element) => getComputedStyle(element).backgroundColor),
+  ).toBe("rgba(0, 0, 0, 0)");
+  expect(
+    await footerBrand.evaluate((element) => getComputedStyle(element).backgroundColor),
+  ).toBe("rgba(0, 0, 0, 0)");
+
+  await expectDecodedImages(
+    page,
+    [
+      ".site-header .brand-logo",
+      ".site-footer .brand-logo",
+      ".hero-photo img",
+      ".product-image-wrap img",
+      ".media-frame--guidance img",
+      ".proof-image img",
+      ".project-strip img",
+    ].join(", "),
+  );
+
+  for (const path of [
+    "/images/brand/boulet-wordmark-color.png",
+    "/images/brand/boulet-wordmark-reversed.png",
+    "/images/brand/boulet-symbol.png",
+  ]) {
+    const response = await request.get(path);
+    expect(response.status(), path).toBe(200);
+    expect(response.headers()["content-type"], path).toMatch(/^image\/png\b/);
+    const bytes = await response.body();
+    expect(bytes.subarray(0, 8), path).toEqual(
+      Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]),
+    );
+  }
+
+  const socialCard = await request.get("/images/custom/social-card-v2.jpg");
+  expect(socialCard.status()).toBe(200);
+  expect(socialCard.headers()["content-type"]).toMatch(/^image\/jpeg\b/);
+  expect((await socialCard.body()).subarray(0, 3)).toEqual(
+    Buffer.from([255, 216, 255]),
+  );
+});
+
+test("guidance imagery decodes across advice and intake routes", async ({
+  page,
+}) => {
+  for (const route of ["/conseils", "/soumission", "/service"] as const) {
+    await page.goto(route, { waitUntil: "networkidle" });
+    await expectDecodedImages(page, ".media-frame--guidance img");
+  }
+});
+
+for (const viewport of [
+  { width: 390, height: 844 },
+  { width: 820, height: 1050 },
+  { width: 1440, height: 1000 },
+] as const) {
+  test(`editorial media keeps its semantic ratios at ${viewport.width}px`, async ({
+    page,
+  }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("/", { waitUntil: "networkidle" });
+
+    for (const [selector, expectedRatio] of [
+      [".product-image-wrap", 4 / 5],
+      [".media-frame--guidance .media-frame__viewport", 3 / 2],
+      [".project-strip figure img", 4 / 3],
+    ] as const) {
+      const media = page.locator(selector).first();
+      await media.scrollIntoViewIfNeeded();
+      const box = await media.boundingBox();
+      expect(box, selector).not.toBeNull();
+      expect(
+        Math.abs((box?.width ?? 0) / (box?.height ?? 1) - expectedRatio),
+        selector,
+      ).toBeLessThan(0.025);
+    }
+  });
+}
 
 test("catalogue filters and legacy category context work with assistive labels", async ({
   page,

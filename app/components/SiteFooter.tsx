@@ -7,7 +7,7 @@ export function SiteFooter() {
     <footer className="site-footer">
       <div className="shell footer-grid">
         <div className="footer-lead">
-          <Brand />
+          <Brand variant="reversed" />
           <p>
             Fabrication, distribution et installation de portes et fenêtres à
             Sorel-Tracy, en Montérégie et dans les régions desservies.

@@ -1,14 +1,24 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export function Brand() {
+type BrandProps = {
+  variant?: "color" | "reversed";
+};
+
+const brandAssets = {
+  color: "/images/brand/boulet-wordmark-color.png",
+  reversed: "/images/brand/boulet-wordmark-reversed.png",
+} as const;
+
+export function Brand({ variant = "color" }: BrandProps) {
   return (
-    <Link className="brand" href="/">
+    <Link className={`brand brand-${variant}`} href="/">
       <Image
         className="brand-logo"
-        src="/media/images/boulet-wordmark-480.webp"
-        width={480}
-        height={83}
+        src={brandAssets[variant]}
+        width={960}
+        height={167}
+        sizes="(max-width: 560px) 172px, 240px"
         alt="Boulet"
         unoptimized
       />

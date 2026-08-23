@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { MediaFrame } from "../../components/MediaFrame";
 import {
   getRealisationProject,
   realisationProjects,
@@ -51,17 +51,17 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           <h1>{project.title}</h1>
           <p>{project.location}</p>
         </div>
-        <figure className="project-detail-image">
-          <Image
-            src={project.image}
-            alt={project.imageAlt}
-            width={1600}
-            height={1000}
-            sizes="100vw"
-            priority
-          />
-          <figcaption>{project.note}</figcaption>
-        </figure>
+        <MediaFrame
+          alt={project.imageAlt}
+          caption={project.note}
+          className="project-detail-image"
+          height={1000}
+          priority
+          mediaRole="project-detail"
+          sizes="(max-width: 1180px) 100vw, 1180px"
+          src={project.image}
+          width={1600}
+        />
       </header>
 
       <section className="section shell project-detail-context">

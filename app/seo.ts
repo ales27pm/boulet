@@ -8,6 +8,8 @@ export const siteOrigin = (
 
 export const siteUrl = new URL(siteOrigin);
 
+const defaultSocialImage = "/images/custom/social-card-v2.jpg";
+
 type PageMetadataInput = {
   title: string;
   description: string;
@@ -21,6 +23,8 @@ export function createPageMetadata({
   path,
   image,
 }: PageMetadataInput): Metadata {
+  const socialImage = image || defaultSocialImage;
+
   return {
     title,
     description,
@@ -32,13 +36,24 @@ export function createPageMetadata({
       title,
       description,
       url: path,
-      ...(image ? { images: [{ url: image }] } : {}),
+      images: [
+        {
+          url: socialImage,
+          ...(image
+            ? {}
+            : {
+                width: 1200,
+                height: 630,
+                alt: "Visuel d’inspiration Boulet montrant une façade résidentielle aux ouvertures noires.",
+              }),
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      ...(image ? { images: [image] } : {}),
+      images: [socialImage],
     },
   };
 }

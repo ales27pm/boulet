@@ -1,9 +1,10 @@
-import Image from "next/image";
+import { MediaFrame } from "./MediaFrame";
 
 type GuidanceFigureProps = {
   alt: string;
   caption: string;
   className?: string;
+  sizes?: string;
   src: string;
 };
 
@@ -11,17 +12,24 @@ export function GuidanceFigure({
   alt,
   caption,
   className = "",
+  sizes = "(max-width: 820px) 90vw, 42vw",
   src,
 }: GuidanceFigureProps) {
-  const classes = ["guidance-figure", className].filter(Boolean).join(" ");
-
   return (
-    <figure className={classes}>
-      <Image src={src} alt={alt} width={1536} height={1024} />
-      <figcaption>
-        <strong>Mise en situation</strong>
-        <span>{caption}</span>
-      </figcaption>
-    </figure>
+    <MediaFrame
+      alt={alt}
+      className={["guidance-figure", className].filter(Boolean).join(" ")}
+      height={1024}
+      mediaRole="guidance"
+      sizes={sizes}
+      src={src}
+      width={1536}
+      caption={
+        <>
+          <strong>Mise en situation</strong>
+          <span>{caption}</span>
+        </>
+      }
+    />
   );
 }
